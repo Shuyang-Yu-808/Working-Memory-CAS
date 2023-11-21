@@ -1,4 +1,3 @@
-import Math
 import csv
 
 class Subject:

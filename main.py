@@ -1,4 +1,5 @@
-from initialize import initialize
+from initialize import StartPageGUI
+from subject import Subject
 
-window = initialize()
-window.mainloop()
+startpage = StartPageGUI()
+startpage.mainloop()
