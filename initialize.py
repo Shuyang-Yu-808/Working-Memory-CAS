@@ -13,7 +13,6 @@ class StartPageGUI(Tk):
         self.tk_select_box_lp8xn6ia = self.__tk_select_box_lp8xn6ia(self)
         self.tk_label_lp8xnl5f = self.__tk_label_lp8xnl5f(self)
         self.tk_input_lp8xnpy1 = self.__tk_input_lp8xnpy1(self)
-        self.width = self.winfo_screenwidth()
 
     def __win(self):
         self.title("工作记忆精确度实验")
@@ -59,34 +58,35 @@ class StartPageGUI(Tk):
         self.scrollbar_autohide(vbar, hbar, widget)
     def __tk_label_lp8xks5k(self,parent):
         label = Label(parent,text="姓：",anchor="center", )
-        label.place(x=50, y=120, width=50, height=30)
+        label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-120, width=60, height=40)
         return label
     def __tk_input_lp8xlrdu(self,parent):
         ipt = Entry(parent, )
-        ipt.place(x=200, y=120, width=57, height=30)
+        ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2-120, width=80, height=40)
         return ipt
     def __tk_label_lp8xmenj(self,parent):
         label = Label(parent,text="名：",anchor="center", )
-        label.place(x=270, y=120, width=50, height=30)
+        label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-40, width=60, height=40)
         return label
     def __tk_input_lp8xmq5r(self,parent):
         ipt = Entry(parent, )
-        ipt.place(x=330, y=120, width=90, height=30)
+        ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2-40, width=80, height=40)
         return ipt
     def __tk_label_lp8xmyvp(self,parent):
         label = Label(parent,text="性别：",anchor="center", )
-        label.place(x=140, y=160, width=50, height=30)
+        label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+40, width=60, height=40)
         return label
     def __tk_select_box_lp8xn6ia(self,parent):
         cb = Combobox(parent, state="readonly", )
-        cb['values'] = ("列表框","Python","Tkinter Helper")
-        cb.place(x=200, y=160, width=58, height=30)
+        cb['values'] = ("","男","女")
+        cb.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+40, width=80, height=40)
         return cb
     def __tk_label_lp8xnl5f(self,parent):
         label = Label(parent,text="年龄：",anchor="center", )
-        label.place(x=270, y=160, width=50, height=30)
+        label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+120, width=60, height=40)
         return label
     def __tk_input_lp8xnpy1(self,parent):
         ipt = Entry(parent, )
-        ipt.place(x=330, y=170, width=91, height=30)
+        ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+120, width=80, height=40)
         return ipt
+    
