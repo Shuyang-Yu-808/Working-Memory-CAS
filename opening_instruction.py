@@ -1,11 +1,16 @@
 from tkinter import *
 from tkinter.ttk import *
-class WinGUI(Tk):
+
+class IntroGUI(Tk):
     def __init__(self):
         super().__init__()
         self.__win()
         self.tk_button_lp8z652o = self.__tk_button_lp8z652o(self)
         self.tk_label_lp8z7p86 = self.__tk_label_lp8z7p86(self)
+
+    def _close(self):
+        self.destroy()
+    
     def __win(self):
         self.title("开始指导语")
         # 设置窗口大小、居中
@@ -56,7 +61,7 @@ class WinGUI(Tk):
             self.h_scrollbar(hbar, widget, x, y, w, h, pw, ph)
         self.scrollbar_autohide(vbar, hbar, widget)
     def __tk_button_lp8z652o(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,)
+        btn = Button(parent, text="继续", takefocus=False,command=self._close)
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
     def __tk_label_lp8z7p86(self,parent):
@@ -67,12 +72,3 @@ class WinGUI(Tk):
 验。如果已经理解指导语，请点击“继续”按钮''',anchor="center")
         label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
         return label
-class Win(WinGUI):
-    def __init__(self):
-        super().__init__()
-        self.__event_bind()
-    def __event_bind(self):
-        pass
-if __name__ == "__main__":
-    win = Win()
-    win.mainloop()
