@@ -8,15 +8,6 @@ class WinGUI(Tk):
         self.tk_label_lp8z7p86 = self.__tk_label_lp8z7p86(self)
     def __win(self):
         self.title("开始指导语")
-        # 设置窗口大小、居中
-        # width = 600
-        # height = 500
-        # screenwidth = self.winfo_screenwidth()
-        # screenheight = self.winfo_screenheight()
-        # geometry = '%dx%d+%d+%d' % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
-        # self.geometry(geometry)
-        
-        # self.minsize(width=width, height=height)
         geometry = '%dx%d+%d+%d' % (self.winfo_screenwidth(),self.winfo_screenheight(),0,0)
         self.geometry(geometry)
         self.attributes('-fullscreen',True)
