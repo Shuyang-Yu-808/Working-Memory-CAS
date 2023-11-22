@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from subject import Subject
 
 class StartPageGUI(Tk):
     def __init__(self):
@@ -13,6 +14,11 @@ class StartPageGUI(Tk):
         self.tk_select_box_lp8xn6ia = self.__tk_select_box_lp8xn6ia(self)
         self.tk_label_lp8xnl5f = self.__tk_label_lp8xnl5f(self)
         self.tk_input_lp8xnpy1 = self.__tk_input_lp8xnpy1(self)
+        self.tk_button_lp8z652o = self.__tk_button_lp8z652o(self)
+        #self.subject = Subject()
+
+    def _close(self):
+        self.destroy()
 
     def __win(self):
         self.title("工作记忆精确度实验")
@@ -89,4 +95,7 @@ class StartPageGUI(Tk):
         ipt = Entry(parent, )
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+120, width=80, height=40)
         return ipt
-    
+    def __tk_button_lp8z652o(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command=self._close)
+        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
+        return btn
