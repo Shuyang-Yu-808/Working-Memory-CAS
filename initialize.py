@@ -29,9 +29,7 @@ class StartPageGUI(Frame):
                               self._subject_age.get(),
                               self._subject_gender.get(),)
         return interviewee
-        
-    def close(self):
-        self.destroy()
+
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""
@@ -101,6 +99,6 @@ class StartPageGUI(Frame):
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+120, width=80, height=40)
         return ipt
     def __tk_button_lp8z652o(self):
-        btn = Button( text="继续", takefocus=False,command=self.controller.go_to_opening())
+        btn = Button( text="继续", takefocus=False,command=self.controller.go_to_opening)
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn

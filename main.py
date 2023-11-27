@@ -27,20 +27,20 @@ class tkinterApp(tk.Tk):
         # initializing frames to an empty array
         self.frames = {}
         for F in (StartPageGUI, IntroGUI):
-
+            page_name = F.__name__
             frame = F(parent=container, controller=self)
 
             # initializing frame of that object from
             # startpage, page1, page2 respectively with 
             # for loop
-            self.frames[F] = frame 
+            self.frames[page_name] = frame 
 
             # frame.grid(row = 0, column = 0, sticky ="nsew")
-        
-        self.show_frame(StartPageGUI)
+        print(self.frames)
+        self.show_frame("StartPageGUI")
 
         # new subject instance
-        self.interviewee = self.frames[StartPageGUI].info()
+        self.interviewee = self.frames["StartPageGUI"].info()
         self.interviewee.test()
 
   
@@ -52,7 +52,9 @@ class tkinterApp(tk.Tk):
 
 
     def go_to_opening(self):
-        frame = self.frames[IntroGUI]
+        # print(self.frames)
+        frame = self.frames["IntroGUI"]
+        print("here ")
         frame.tkraise()
 
 
