@@ -11,6 +11,7 @@ class StartPageGUI(Frame):
         self._subject_first = StringVar()
         self._subject_age = StringVar()
         self._subject_gender = StringVar()
+
         self.tk_label_lp8xks5k = self.__tk_label_lp8xks5k()
         self.tk_input_lp8xlrdu = self.__tk_input_lp8xlrdu()
         self.tk_label_lp8xmenj = self.__tk_label_lp8xmenj()
@@ -22,14 +23,15 @@ class StartPageGUI(Frame):
 
         self.button = self.__tk_button_lp8z652o()
         
-
-    def close(self):
+    def info(self):
         interviewee = Subject(self._subject_first.get(),
                               self._subject_last.get(),
                               self._subject_age.get(),
                               self._subject_gender.get(),)
+        return interviewee
+        
+    def close(self):
         self.destroy()
-
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""
@@ -95,7 +97,7 @@ class StartPageGUI(Frame):
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+120, width=60, height=40)
         return label
     def __tk_input_lp8xnpy1(self):
-        ipt = Entry( textvariable=self._subject_gender)
+        ipt = Entry( textvariable=self._subject_age)
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+120, width=80, height=40)
         return ipt
     def __tk_button_lp8z652o(self):

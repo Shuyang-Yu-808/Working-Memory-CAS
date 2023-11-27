@@ -23,11 +23,9 @@ class tkinterApp(tk.Tk):
         container = tk.Frame(self)  
         container.pack(side = "top", fill = "both", expand = True) 
   
-        # container.grid_rowconfigure(0, weight = 1)
-        # container.grid_columnconfigure(0, weight = 1)
   
         # initializing frames to an empty array
-        self.frames = {}  
+        self.frames = {}
         for F in (StartPageGUI, IntroGUI):
 
             frame = F(parent=container, controller=self)
@@ -40,6 +38,11 @@ class tkinterApp(tk.Tk):
             # frame.grid(row = 0, column = 0, sticky ="nsew")
   
         self.show_frame(StartPageGUI)
+
+        # new subject instance
+        self.interviewee = self.frames[StartPageGUI].info()
+        self.interviewee.test()
+
   
     # to display the current frame passed as
     # parameter

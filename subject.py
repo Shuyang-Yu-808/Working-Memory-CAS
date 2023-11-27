@@ -45,4 +45,5 @@ class Subject:
             csvwriter.writerow(fields)
             csvwriter.writerow(row)
         
-
+    def test(self):
+        print(self.firstname," ",self.gender)
