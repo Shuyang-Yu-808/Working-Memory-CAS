@@ -21,8 +21,8 @@ class tkinterApp(tk.Tk):
         container = tk.Frame(self)  
         container.pack(side = "top", fill = "both", expand = True) 
   
-        container.grid_rowconfigure(0, weight = 1)
-        container.grid_columnconfigure(0, weight = 1)
+        # container.grid_rowconfigure(0, weight = 1)
+        # container.grid_columnconfigure(0, weight = 1)
   
         # initializing frames to an empty array
         self.frames = {}  
@@ -36,7 +36,7 @@ class tkinterApp(tk.Tk):
             # for loop
             self.frames[F] = frame 
 
-            frame.grid(row = 0, column = 0, sticky ="nsew")
+            # frame.grid(row = 0, column = 0, sticky ="nsew")
   
         self.show_frame(StartPageGUI)
   
