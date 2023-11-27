@@ -10,17 +10,17 @@ E4 = Experiment('4_mirror',70)
 
 
 class Subject:
-    def __init__(self, firstname, lastname, age, gender,experiment: namedtuple):
+    def __init__(self, firstname, lastname, age, gender):
         self.firstname = firstname
         self.lastname = lastname
         self.age = age
         self.gender = gender
-        self.experiment = experiment
+        #self.experiment = experiment
         self.diff_in_rad = {}
         self.reaction_time = {}
-        for i in range(experiment.N_sets):
-            self.diff_in_rad[i] = -1
-            self.reaction_time[i] = -1
+        #for i in range(experiment.N_sets):
+        #    self.diff_in_rad[i] = -1
+        #    self.reaction_time[i] = -1
 
 
     # def insert_exp_result_into(self,reactiontime,)
