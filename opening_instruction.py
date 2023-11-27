@@ -1,10 +1,11 @@
 from tkinter import *
 from tkinter.ttk import *
 
-class IntroGUI(Tk):
-    def __init__(self):
-        super().__init__()
-        self.__win()
+class IntroGUI(Frame):
+    def __init__(self,parent,controller):
+
+        Frame.__init__(self,parent)
+        self.controller = controller
         self.tk_label_lp8z7p86 = self.__tk_label_lp8z7p86(self)
   
         self.button = self.__tk_button_lp8z652o(self)
@@ -12,13 +13,6 @@ class IntroGUI(Tk):
     def close(self):
         self.destroy()
     
-    
-    def __win(self):
-        self.title("工作记忆精确度实验")
-        geometry = '%dx%d+%d+%d' % (self.winfo_screenwidth(),self.winfo_screenheight(),0,0)
-        self.geometry(geometry)
-        self.attributes('-fullscreen',True)
-        self.resizable(width=False, height=False)
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""

@@ -16,10 +16,9 @@ from tkinter import ttk
 
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
-         
         # __init__ function for class Tk
         tk.Tk.__init__(self, *args, **kwargs)
-         
+        self.__win()
         # creating a container
         container = tk.Frame(self)  
         container.pack(side = "top", fill = "both", expand = True) 
@@ -29,10 +28,9 @@ class tkinterApp(tk.Tk):
   
         # initializing frames to an empty array
         self.frames = {}  
-
         for F in (StartPageGUI, IntroGUI):
 
-            frame = F()
+            frame = F(parent=container, controller=self)
 
             # initializing frame of that object from
             # startpage, page1, page2 respectively with 
@@ -49,5 +47,11 @@ class tkinterApp(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
+    def __win(self):
+        self.title("工作记忆精确度实验")
+        geometry = '%dx%d+%d+%d' % (self.winfo_screenwidth(),self.winfo_screenheight(),0,0)
+        self.geometry(geometry)
+        self.attributes('-fullscreen',True)
+        self.resizable(width=False, height=False)
 app = tkinterApp()
 app.mainloop()
