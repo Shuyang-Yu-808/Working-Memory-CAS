@@ -7,6 +7,9 @@ from tkinter import ttk
 
 # startpage = StartPageGUI()
 # startpage.mainloop()
+# global interviewee
+# startpage = StartPageGUI()
+# startpage.mainloop()
 
 # intro = IntroGUI()
 # intro.mainloop()
