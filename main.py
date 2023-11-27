@@ -36,7 +36,7 @@ class tkinterApp(tk.Tk):
             self.frames[F] = frame 
 
             # frame.grid(row = 0, column = 0, sticky ="nsew")
-  
+        
         self.show_frame(StartPageGUI)
 
         # new subject instance
@@ -49,6 +49,12 @@ class tkinterApp(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+
+
+    def go_to_opening(self):
+        frame = self.frames[IntroGUI]
+        frame.tkraise()
+
 
     def __win(self):
         self.title("工作记忆精确度实验")
