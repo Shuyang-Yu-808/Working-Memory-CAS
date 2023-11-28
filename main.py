@@ -5,15 +5,6 @@ from base_opening import base_intro
 import tkinter as tk
 from tkinter import ttk
 
-# startpage = StartPageGUI()
-# startpage.mainloop()
-# global interviewee
-# startpage = StartPageGUI()
-# startpage.mainloop()
-
-# intro = IntroGUI()
-# intro.mainloop()
-
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
@@ -38,26 +29,20 @@ class tkinterApp(tk.Tk):
             self.frames[page_name] = frame 
 
             frame.grid(row = 0, column = 0, sticky ="nsew")
-        print(self.frames)
         self.show_frame("StartPageGUI")
-
-        #new subject instance
-        self.interviewee = self.frames["StartPageGUI"].info()
-        self.interviewee.test()
 
 
   
     # to display the current frame passed as
     # parameter
     def show_frame(self, cont):
-        print("page1")
         frame = self.frames[cont]
         frame.tkraise()
 
 
     def go_to_opening(self):
         frame = self.frames["IntroGUI"]
-        print("page2")
+        self.interviewee = self.frames["StartPageGUI"].info()
         frame.tkraise()
 
 
@@ -67,5 +52,7 @@ class tkinterApp(tk.Tk):
         self.geometry(geometry)
         self.attributes('-fullscreen',True)
         self.resizable(width=False, height=False)
+
+
 app = tkinterApp()
 app.mainloop()
