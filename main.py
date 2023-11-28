@@ -19,9 +19,11 @@ class tkinterApp(tk.Tk):
         # __init__ function for class Tk
         tk.Tk.__init__(self, *args, **kwargs)
         self.__win()
-        # creating a container
-        container = tk.Frame(self)  
-        container.pack(side = "top", fill = "both", expand = True) 
+        # creating a containerclear
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1) 
   
   
         # initializing frames to an empty array
@@ -35,26 +37,27 @@ class tkinterApp(tk.Tk):
             # for loop
             self.frames[page_name] = frame 
 
-            # frame.grid(row = 0, column = 0, sticky ="nsew")
+            frame.grid(row = 0, column = 0, sticky ="nsew")
         print(self.frames)
         self.show_frame("StartPageGUI")
 
-        # new subject instance
+        #new subject instance
         self.interviewee = self.frames["StartPageGUI"].info()
         self.interviewee.test()
+
 
   
     # to display the current frame passed as
     # parameter
     def show_frame(self, cont):
+        print("page1")
         frame = self.frames[cont]
         frame.tkraise()
 
 
     def go_to_opening(self):
-        # print(self.frames)
         frame = self.frames["IntroGUI"]
-        print("here ")
+        print("page2")
         frame.tkraise()
 
 
