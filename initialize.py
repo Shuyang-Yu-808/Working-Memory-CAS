@@ -7,30 +7,23 @@ class StartPageGUI(Frame):
         Frame.__init__(self,parent)
         self.controller = controller
 
-        self._subject_last = StringVar()
-        self._subject_first = StringVar()
-        self._subject_age = StringVar()
-        self._subject_gender = StringVar()
+        self.label_last = self.__label_last(self)
+        self.input_last = self.__input_last(self)
+        self.label_first = self.__label_first(self)
+        self.input_first = self.__input_first(self)
+        self.label_gender = self.__label_gender(self)
+        self.select_gender = self.__select_gender(self)
+        self.label_age = self.__label_age(self)
+        self.input_age = self.__input_age(self)
 
-        self.tk_label_lp8xks5k = self.__tk_label_lp8xks5k(self)
-        self.tk_input_lp8xlrdu = self.__tk_input_lp8xlrdu(self)
-        self.tk_label_lp8xmenj = self.__tk_label_lp8xmenj(self)
-        self.tk_input_lp8xmq5r = self.__tk_input_lp8xmq5r(self)
-        self.tk_label_lp8xmyvp = self.__tk_label_lp8xmyvp(self)
-        self.tk_select_box_lp8xn6ia = self.__tk_select_box_lp8xn6ia(self)
-        self.tk_label_lp8xnl5f = self.__tk_label_lp8xnl5f(self)
-        self.tk_input_lp8xnpy1 = self.__tk_input_lp8xnpy1(self)
-
-        self.button = self.__tk_button_lp8z652o(self)
+        self.button = self.__button(self)
 
         
     def info(self):
-        interviewee = Subject(self._subject_first.get(),
-                              self._subject_last.get(),
-                              self._subject_age.get(),
-                              self._subject_gender.get(),)
-        print("s")
-        print(self._subject_gender.get(),'!')
+        interviewee = Subject(self.input_first.get(),
+                              self.input_last.get(),
+                              self.input_age.get(),
+                              self.select_gender.get())
         return interviewee
 
 
@@ -68,40 +61,40 @@ class StartPageGUI(Frame):
             self.h_scrollbar(hbar, widget, x, y, w, h, pw, ph)
         self.scrollbar_autohide(vbar, hbar, widget)
 
-    def __tk_label_lp8xks5k(self,parent):
+    def __label_last(self,parent):
         label = Label(parent,text="姓：",anchor="center", )
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-120, width=60, height=40)
         return label
-    def __tk_input_lp8xlrdu(self,parent):
-        ipt = Entry(parent, textvariable=self._subject_last)
+    def __input_last(self,parent):
+        ipt = Entry(parent)
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2-120, width=80, height=40)
         return ipt
-    def __tk_label_lp8xmenj(self,parent):
+    def __label_first(self,parent):
         label = Label(parent,text="名：",anchor="center", )
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-40, width=60, height=40)
         return label
-    def __tk_input_lp8xmq5r(self,parent):
-        ipt = Entry(parent, textvariable=self._subject_first)
+    def __input_first(self,parent):
+        ipt = Entry(parent)
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2-40, width=80, height=40)
         return ipt
-    def __tk_label_lp8xmyvp(self,parent):
+    def __label_gender(self,parent):
         label = Label(parent,text="性别：",anchor="center", )
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+40, width=60, height=40)
         return label
-    def __tk_select_box_lp8xn6ia(self,parent):
-        cb = Combobox(parent, state="readonly", textvariable=self._subject_gender)
+    def __select_gender(self,parent):
+        cb = Combobox(parent, state="readonly")
         cb['values'] = ("","男","女")
         cb.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+40, width=80, height=40)
         return cb
-    def __tk_label_lp8xnl5f(self,parent):
+    def __label_age(self,parent):
         label = Label(parent,text="年龄：",anchor="center", )
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+120, width=60, height=40)
         return label
-    def __tk_input_lp8xnpy1(self,parent):
-        ipt = Entry(parent, textvariable=self._subject_age)
+    def __input_age(self,parent):
+        ipt = Entry(parent)
         ipt.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+120, width=80, height=40)
         return ipt
-    def __tk_button_lp8z652o(self,parent):
+    def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command=self.controller.go_to_opening)
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
