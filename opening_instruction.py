@@ -10,9 +10,6 @@ class IntroGUI(Frame):
   
         self.button = self.__tk_button_lp8z652o(self)
 
-    def close(self):
-        self.destroy()
-    
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""
@@ -57,6 +54,6 @@ class IntroGUI(Frame):
         label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
         return label
     def __tk_button_lp8z652o(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command=self.close)
+        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("base_intro"))
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
