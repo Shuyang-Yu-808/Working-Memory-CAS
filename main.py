@@ -5,7 +5,7 @@ from base_opening import base_intro
 from base_instruction import base_instruct
 import tkinter as tk
 from tkinter import ttk
-
+from baseline_task import baseline
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
@@ -20,7 +20,7 @@ class tkinterApp(tk.Tk):
   
         # initializing frames to an empty array
         self.frames = {}
-        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct):
+        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct,baseline):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 

@@ -1,15 +1,25 @@
 from tkinter import *
 from tkinter.ttk import *
+from PIL import Image, ImageDraw 
 
-class base_instruct(Frame):
+class baseline(Frame):
     def __init__(self,parent,controller):
 
         Frame.__init__(self,parent)
         self.controller = controller
-        self.tk_label_lp8z7p86 = self.__instruction_label(self)
+        self.tk_label_lp8z7p86 = self.__opening_label(self)
   
-        self.button = self.__next_button(self)
-
+        self.button = self.__tk_button_lp8z652o(self)
+        w, h = 220, 190
+        shape = [(40, 40), (w - 10, h - 10)] 
+        
+        # creating new Image object 
+        img = Image.new("RGB", (w, h)) 
+        
+        # create line image 
+        img1 = ImageDraw.Draw(img)   
+        img1.line(shape, fill ="red", width = 0) 
+        img.show() 
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""
@@ -45,16 +55,16 @@ class base_instruct(Frame):
             self.h_scrollbar(hbar, widget, x, y, w, h, pw, ph)
         self.scrollbar_autohide(vbar, hbar, widget)
 
-    def __instruction_label(self,parent):
-        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段，请你用鼠标调整下方的线段
-直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
+    def __opening_label(self,parent):
+        label = Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
                       font=("Arial", 25),
                       anchor="center")
         label.pack()
+        # label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
         label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
         
         return label
-    def __next_button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("baseline"))
+    def __tk_button_lp8z652o(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("base_instruct"))
         btn.place(relx=0.81, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
