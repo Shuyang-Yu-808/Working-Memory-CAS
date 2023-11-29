@@ -38,7 +38,7 @@ class Subject:
         if not(self.age.isdigit()):
             raise AgeError
         else:
-            if int(self.age)!=float(self.age) or self.age<=0:
+            if int(self.age)!=float(self.age) or int(self.age)<=0:
                 raise AgeError
 
     # def insert_exp_result_into(self,reactiontime,)

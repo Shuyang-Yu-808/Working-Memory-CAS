@@ -50,8 +50,13 @@ class IntroGUI(Frame):
 本次实验是关于视觉的心理学实验，任务表现的好坏都不影响对你个人能力的评价，请尽自己最大的能力
 去做即可。在接下来的任务中，你将会看到一些不同颜色、朝向的线段，请你尽可能准确地记住不同颜色
 线段的朝向，之后用鼠标按照你记忆的方向调整相应颜色线段的朝向。确认调整好后单击“继续”按钮以继续实
-验。如果已经理解指导语，请点击“继续”按钮''',anchor="center")
-        label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
+验。如果已经理解指导语，请点击“继续”按钮''',anchor="center",
+        font=("Arial",25))
+        
+        # label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
+        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.53, anchor=CENTER)
+
+
         return label
     def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("base_intro"))

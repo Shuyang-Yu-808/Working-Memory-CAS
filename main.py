@@ -2,6 +2,7 @@ from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from subject import Subject,IntervieweeNameError,GenderError,AgeError
 from base_opening import base_intro
+from base_instruction import base_instruct
 import tkinter as tk
 from tkinter import ttk
 
@@ -19,7 +20,7 @@ class tkinterApp(tk.Tk):
   
         # initializing frames to an empty array
         self.frames = {}
-        for F in (StartPageGUI, IntroGUI,base_intro):
+        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
