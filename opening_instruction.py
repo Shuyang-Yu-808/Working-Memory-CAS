@@ -52,9 +52,11 @@ class IntroGUI(Frame):
 线段的朝向，之后用鼠标按照你记忆的方向调整相应颜色线段的朝向。确认调整好后单击“继续”按钮以继续实
 验。如果已经理解指导语，请点击“继续”按钮''',anchor="center",
         font=("Arial",25))
+        # label.config(width=50,height=100)
+
         
         # label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
-        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.53, anchor=CENTER)
+        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.7, anchor=CENTER)
 
 
         return label
