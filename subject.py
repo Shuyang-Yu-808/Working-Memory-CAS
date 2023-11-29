@@ -7,7 +7,14 @@ E2 = Experiment("1_mirror",45)
 E3 = Experiment("3_normal",70)
 E4 = Experiment('4_mirror',70)
 
+class IntervieweeNameError(Exception):
+    pass
 
+class GenderError(Exception):
+    pass
+
+class AgeError(Exception):
+    pass
 
 class Subject:
     def __init__(self, firstname, lastname, age, gender):
@@ -22,6 +29,17 @@ class Subject:
         #    self.diff_in_rad[i] = -1
         #    self.reaction_time[i] = -1
 
+    def examine(self):
+        flag = True
+        if len(self.firstname)==0 or len(self.lastname)==0:
+            raise IntervieweeNameError
+        if not (self.gender=="男" or self.gender=="女"):
+            raise GenderError
+        if not(self.age.isdigit()):
+            raise AgeError
+        else:
+            if int(self.age)!=float(self.age) or self.age<=0:
+                raise AgeError
 
     # def insert_exp_result_into(self,reactiontime,)
 

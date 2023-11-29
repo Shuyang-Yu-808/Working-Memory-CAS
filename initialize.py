@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
-from subject import Subject
+from subject import Subject,IntervieweeNameError,GenderError,AgeError
 
 class StartPageGUI(Frame):
     def __init__(self,parent,controller):
@@ -26,6 +26,8 @@ class StartPageGUI(Frame):
                               self.select_gender.get())
         return interviewee
 
+    def error(self,e):
+        self.label_error = self.__label_error(self,e)
 
     def scrollbar_autohide(self,vbar, hbar, widget):
         """自动隐藏滚动条"""
@@ -98,3 +100,14 @@ class StartPageGUI(Frame):
         btn = Button(parent, text="继续", takefocus=False,command=self.controller.go_to_opening)
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
+    def __label_error(self,parent,e):
+        if e==IntervieweeNameError:
+            text = "姓名输入不正确，请重新输入。"
+        elif e==GenderError:
+            text = "性别选择不正确，请重新选择。"
+        else:
+            text = "年龄输入不正确，请重新输入。"
+        label = Label(parent,text=text,anchor="center",justify="center")
+        label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-220, width=200, height=40)
+
+        return label

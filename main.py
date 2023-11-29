@@ -1,6 +1,6 @@
 from initialize import StartPageGUI
 from opening_instruction import IntroGUI
-from subject import Subject
+from subject import Subject,IntervieweeNameError,GenderError,AgeError
 from base_opening import base_intro
 import tkinter as tk
 from tkinter import ttk
@@ -43,6 +43,11 @@ class tkinterApp(tk.Tk):
     def go_to_opening(self):
         frame = self.frames["IntroGUI"]
         self.interviewee = self.frames["StartPageGUI"].info()
+        try:
+            self.interviewee.examine()
+        except (IntervieweeNameError,GenderError,AgeError) as e:
+            self.frames["StartPageGUI"].error(e)
+            frame = self.frames["StartPageGUI"]
         frame.tkraise()
 
 

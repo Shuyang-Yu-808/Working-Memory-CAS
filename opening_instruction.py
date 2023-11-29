@@ -6,9 +6,9 @@ class IntroGUI(Frame):
 
         Frame.__init__(self,parent)
         self.controller = controller
-        self.tk_label_lp8z7p86 = self.__tk_label_lp8z7p86(self)
+        self.label_instruction = self.__label_instruction(self)
   
-        self.button = self.__tk_button_lp8z652o(self)
+        self.button = self.__button(self)
 
 
     def scrollbar_autohide(self,vbar, hbar, widget):
@@ -45,7 +45,7 @@ class IntroGUI(Frame):
             self.h_scrollbar(hbar, widget, x, y, w, h, pw, ph)
         self.scrollbar_autohide(vbar, hbar, widget)
 
-    def __tk_label_lp8z7p86(self,parent):
+    def __label_instruction(self,parent):
         label = Label(parent,text='''你好！欢迎你参加本次心理学实验，在完成任务前请仔细阅读以下的指导语：
 本次实验是关于视觉的心理学实验，任务表现的好坏都不影响对你个人能力的评价，请尽自己最大的能力
 去做即可。在接下来的任务中，你将会看到一些不同颜色、朝向的线段，请你尽可能准确地记住不同颜色
@@ -53,7 +53,7 @@ class IntroGUI(Frame):
 验。如果已经理解指导语，请点击“继续”按钮''',anchor="center")
         label.place(relx=0.15, rely=0.1, relwidth=0.6566666666666666, relheight=0.522)
         return label
-    def __tk_button_lp8z652o(self,parent):
+    def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("base_intro"))
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
