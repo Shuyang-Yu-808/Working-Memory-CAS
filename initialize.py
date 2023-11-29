@@ -98,7 +98,7 @@ class StartPageGUI(Frame):
         return ipt
     def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command=self.controller.go_to_opening)
-        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
+        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
     def __label_error(self,parent,e):
         if e==IntervieweeNameError:

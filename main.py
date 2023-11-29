@@ -20,7 +20,7 @@ class tkinterApp(tk.Tk):
   
         # initializing frames to an empty array
         self.frames = {}
-        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct,baseline):
+        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 

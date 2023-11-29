@@ -66,5 +66,6 @@ class baseline(Frame):
         return label
     def __tk_button_lp8z652o(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("base_instruct"))
-        btn.place(relx=0.81, rely=0.7, relwidth=0.08, relheight=0.06)
+        # btn.place(relx=0.81, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn

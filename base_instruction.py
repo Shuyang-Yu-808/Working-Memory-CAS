@@ -55,6 +55,6 @@ class base_instruct(Frame):
         
         return label
     def __next_button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("baseline"))
-        btn.place(relx=0.81, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("base_instruct"))
+        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
