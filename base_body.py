@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
 from random import *
-
+import math
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
 
@@ -10,12 +10,13 @@ class BaseBodyGUI(Frame):
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()/2
         self.button = self.__button(self)
-        self.canvas = self.__canvas(self)
-        self.coor1 = self.rand_coor()
-        self.coor2 = self.rand_coor()
-        self.point1 = self.draw_point(self,self.coor1,r=10)
-        self.point2 = self.draw_point(self,self.coor2,r=10)
-        self.line = self.draw_line(self,self.coor1,self.coor2)
+        self.upper_canvas = self.__upper_canvas(self)
+        self.lower_canvas = self.__lower_canvas(self)
+        self.coords = self.rand_coor_on_circle(200)
+
+        self.point1 = self.draw_point(self,self.coords[:2],r=10)
+        self.point2 = self.draw_point(self,self.coords[2:],r=10)
+        self.line = self.draw_line(self,self.coords)
 
 
     def scrollbar_autohide(self,vbar, hbar, widget):
@@ -57,25 +58,46 @@ class BaseBodyGUI(Frame):
         btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
         return btn
     
-    def __canvas(self,parent):
+    def __upper_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
                      height=self.winfo_screenheight()/2,bg='#fff')
         cvs.place(x=self.winfo_screenwidth()/2,
+                  y=self.winfo_screenheight()*(1/4),
+                  anchor="center")
+        return cvs
+
+
+    def __lower_canvas(self,parent):
+        cvs = Canvas(parent,
+                     width=self.winfo_screenwidth(),
+                     height=self.winfo_screenheight()/2,bg='#eee')
+        cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()*(3/4),
                   anchor="center")
         return cvs
-        
-    def draw_line(self,parent,coor1,coor2):
-        return self.canvas.create_line(coor1[0],coor1[1],coor2[0],coor2[1],width=20)
+    
+    
+    def draw_line(self,parent,coords):
+        return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=20)
 
     
     def draw_point(self,parent,coor,r):
         centerx = coor[0]
         centery = coor[1]
-        return self.canvas.create_oval(centerx-r, centery-r, centerx+r, centery+r, width = 2)
+        return self.upper_canvas.create_oval(centerx-r, centery-r, centerx+r, centery+r, width = 2)
         #return self.canvas.create_oval(0,0,200,200, width = 2)
     
     def rand_coor(self):
-        return (randint(0,self.canvas_w),randint(0,self.canvas_h))
+        return (randint(0,self.canvas_w/2),randint(0,self.canvas_h/2))
+
+    def rand_coor_on_circle(self,radius):
+        theta = math.radians(randint(0,359))
+        center_x = self.canvas_w/2
+        center_y = self.canvas_h/2
+        point1_x = center_x+math.cos(theta)*radius
+        point1_y = center_y+math.sin(theta)*radius
+        point2_x = center_x-math.cos(theta)*radius
+        point2_y = center_y-math.sin(theta)*radius        
+        return (point1_x,point1_y,point2_x,point2_y)
 
