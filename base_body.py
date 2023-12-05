@@ -3,77 +3,46 @@ from tkinter.ttk import *
 from random import *
 import math
 
-RADIUS = 200
+RADIUS = 200 # Radius of user operable area
 
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
 
         Frame.__init__(self,parent)
         self.controller = controller
+
+        # Size of half-screen canvas
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()/2
+
+        # Continue button instance
         self.button = self.__button(self)
         
+        # Canvas instances
         self.upper_canvas = self.__upper_canvas(self)
         self.lower_canvas = self.__lower_canvas(self)
         
+        # Reference line on upper canvas
         self.upper_coords = self.rand_coor_on_circle(200,self.canvas_w,self.canvas_h)
-        self.upper_coords = self.rand_coor_on_circle(200,self.canvas_w,self.canvas_h)
-        
-        
-        self.lower_coords = self.h_coor_on_circle_lower(200,self.canvas_w,self.canvas_h)
-
         self.upper_line = self.draw_line(self,self.upper_coords,'upper')
+
+        # Operable line on lower canvas
+        self.lower_coords = self.h_coor_on_circle_lower(200,self.canvas_w,self.canvas_h)
         self.lower_line = self.draw_line(self,self.lower_coords,'lower')
 
+        # Relative coordinate on lower canvas (not global height)
         self.lower_center_x = self.canvas_w/2
-        self.lower_center_y = self.winfo_screenheight()/4 # relative coordinate on lower canvas not global height
-        
+        self.lower_center_y = self.winfo_screenheight()/4 
 
         #TO DO: change 200 to global variable RADIUS
         self.lower_canvas.create_oval(self.canvas_w/2-200,self.canvas_h/2-200,self.canvas_w/2+200,self.canvas_h/2+200,width = 2,
         dash=(10,10))
         
         # test rotate function
-        self.lower_canvas.create_oval(self.canvas_w/2+50-5,self.canvas_h/2+60-5,self.canvas_w/2+50+5,self.canvas_h/2+60+5,fill="red")
+        # self.lower_canvas.create_oval(self.canvas_w/2+50-5,self.canvas_h/2+60-5,self.canvas_w/2+50+5,self.canvas_h/2+60+5,fill="red")
         # print('self canvas w',self.canvas_w)
         # print('self canvas h',self.canvas_h)
-
-        self.rotate_lower_line(self,x = self.canvas_w/2+50,y = self.canvas_h/2+60)
-        
-    def scrollbar_autohide(self,vbar, hbar, widget):
-        """自动隐藏滚动条"""
-        def show():
-            if vbar: vbar.lift(widget)
-            if hbar: hbar.lift(widget)
-        def hide():
-            if vbar: vbar.lower(widget)
-            if hbar: hbar.lower(widget)
-        hide()
-        widget.bind("<Enter>", lambda e: show())
-        if vbar: vbar.bind("<Enter>", lambda e: show())
-        if vbar: vbar.bind("<Leave>", lambda e: hide())
-        if hbar: hbar.bind("<Enter>", lambda e: show())
-        if hbar: hbar.bind("<Leave>", lambda e: hide())
-        widget.bind("<Leave>", lambda e: hide())
-    
-    def v_scrollbar(self,vbar, widget, x, y, w, h, pw, ph):
-        widget.configure(yscrollcommand=vbar.set)
-        vbar.config(command=widget.yview)
-        vbar.place(relx=(w + x) / pw, rely=y / ph, relheight=h / ph, anchor='ne')
-    def h_scrollbar(self,hbar, widget, x, y, w, h, pw, ph):
-        widget.configure(xscrollcommand=hbar.set)
-        hbar.config(command=widget.xview)
-        hbar.place(relx=x / pw, rely=(y + h) / ph, relwidth=w / pw, anchor='sw')
-    def create_bar(self,master, widget,is_vbar,is_hbar, x, y, w, h, pw, ph):
-        vbar, hbar = None, None
-        if is_vbar:
-            vbar = Scrollbar(master)
-            self.v_scrollbar(vbar, widget, x, y, w, h, pw, ph)
-        if is_hbar:
-            hbar = Scrollbar(master, orient="horizontal")
-            self.h_scrollbar(hbar, widget, x, y, w, h, pw, ph)
-        self.scrollbar_autohide(vbar, hbar, widget)
+        #self.rotate_lower_line(self,x = self.canvas_w/2+50,y = self.canvas_h/2+60)
     
     def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("base_intro"))
@@ -133,7 +102,7 @@ class BaseBodyGUI(Frame):
         theta = math.radians(0)
         center_x = w/2
         center_y = h/2
-        print(center_x,center_y)
+        # print(center_x,center_y)
         point1_x = center_x+radius
         point1_y = center_y
         point2_x = center_x-radius
@@ -149,7 +118,7 @@ class BaseBodyGUI(Frame):
         # print("result",(x-self.lower_center_x)**2 + (y-self.lower_center_y)**2)
         # print("radius sq", RADIUS**2)
         if ((x-self.lower_center_x)**2 + (y-self.lower_center_y)**2) <= (RADIUS**2):
-            print('1')
+            # print('1')
             slope = (y-self.lower_center_y)/(x-self.lower_center_x)
             theta = math.atan(slope)
             x_offset = math.cos(theta)*RADIUS

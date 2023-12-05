@@ -1,11 +1,11 @@
-from initialize import StartPageGUI
-from opening_instruction import IntroGUI
-from subject import Subject,IntervieweeNameError,GenderError,AgeError
-from base_opening import base_intro
-from base_instruction import base_instruct
 import tkinter as tk
 from tkinter import ttk
-from baseline_task import baseline
+
+from initialize import StartPageGUI
+from opening_instruction import IntroGUI
+from base_opening import BaseIntroGUI
+from base_body import BaseBodyGUI
+
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
@@ -20,7 +20,7 @@ class tkinterApp(tk.Tk):
   
         # initializing frames to an empty array
         self.frames = {}
-        for F in (StartPageGUI, IntroGUI,base_intro,base_instruct):
+        for F in (StartPageGUI, IntroGUI,BaseIntroGUI,BaseBodyGUI):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
 
@@ -33,31 +33,19 @@ class tkinterApp(tk.Tk):
         self.show_frame("StartPageGUI")
 
 
-  
-    # to display the current frame passed as
-    # parameter
-    def show_frame(self, cont):
-        frame = self.frames[cont]
-        frame.tkraise()
-
-
-    def go_to_opening(self):
-        frame = self.frames["IntroGUI"]
-        self.interviewee = self.frames["StartPageGUI"].info()
-        try:
-            self.interviewee.examine()
-        except (IntervieweeNameError,GenderError,AgeError) as e:
-            self.frames["StartPageGUI"].error(e)
-            frame = self.frames["StartPageGUI"]
-        frame.tkraise()
-
-
     def __win(self):
         self.title("工作记忆精确度实验")
         geometry = '%dx%d+%d+%d' % (self.winfo_screenwidth(),self.winfo_screenheight(),0,0)
         self.geometry(geometry)
         self.attributes('-fullscreen',True)
         self.resizable(width=False, height=False)
+
+    
+    # Display the current frame passed as parameter
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+
 
 
 app = tkinterApp()
