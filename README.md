@@ -16,3 +16,8 @@
 
     All data processing should be done within frame classes/instances
     Avoid handling any data main.py
+
+# TODO:
+    1. Comments
+    2. Drag-to-rotate
+    3. Adaptive interface
