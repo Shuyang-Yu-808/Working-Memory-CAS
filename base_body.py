@@ -33,7 +33,7 @@ class BaseBodyGUI(Frame):
         self.upper_canvas = self.__upper_canvas(self)
         self.lower_canvas = self.__lower_canvas(self)
         
-        # Reference line on upper canvas
+        # Reference line on upper canvas format(x1,y1,x2,y2)
         self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
         self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
 
@@ -57,7 +57,10 @@ class BaseBodyGUI(Frame):
         
         # Continue button instance
         self.button = self.__continue_button(self)
-    
+        self.base_result = []
+        self.lower_line_slope = 0
+
+
     def __upper_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
@@ -79,13 +82,14 @@ class BaseBodyGUI(Frame):
     
     def __continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
+        btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
         return btn
     
-    def __next_button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("TestIntroGUI"))
-        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
-        return btn
+    # def __next_button(self,parent):
+    #     # btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame())
+    #     btn = Button(parent, text="继续", takefocus=False)
+    #     btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
+    #     return btn
     
     def __draw_line(self,parent,coords,canvas):
         if canvas == "upper":
@@ -115,6 +119,7 @@ class BaseBodyGUI(Frame):
 
     def __rotate_lower_line(self,parent,x,y):
         if abs(x - self.lower_center_x) <= MINIMUM_X_DIFF:
+            # don't update the slope
             new_p1_x = self.lower_center_x
             new_p2_x = self.lower_center_x
             if y <= self.lower_center_y:
@@ -132,6 +137,7 @@ class BaseBodyGUI(Frame):
             new_p1_y = self.lower_center_y+y_offset
             new_p2_x = self.lower_center_x-x_offset
             new_p2_y = self.lower_center_y-y_offset
+            self.lower_line_slope = slope
         self.lower_canvas.delete(self.lower_line)
         self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
     
@@ -141,18 +147,29 @@ class BaseBodyGUI(Frame):
             self.mouse_y = event.y
             self.__rotate_lower_line(self,self.mouse_x,self.mouse_y)
 
+    def _update_base_result(self,slope1,slope2):
+        theta1 = math.atan(slope1)
+        theta2 = math.atan(slope2)
+        self.base_result.append(abs(theta1-theta2))
+
+
     def __reset(self):
-        self.mouse_x = 0
-        self.mouse_y = 0
+        self._update_base_result((self.upper_coords[3]-self.upper_coords[1])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
+        if self.count == 10:
+            print(self.base_result)
+            
+        elif self.count < 10:
+            self.mouse_x = 0
+            self.mouse_y = 0
 
-        self.upper_canvas.delete(self.upper_line)
-        self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
-        self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
+            self.upper_canvas.delete(self.upper_line)
+            self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
+            self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
 
-        self.lower_canvas.delete(self.lower_line)
-        self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-        self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-        if self.count == 9:
-            self.button.destroy()
-            self.button = self.__next_button(self)
+            self.lower_canvas.delete(self.lower_line)
+            self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
+            self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+            # if self.count == 9:
+            #     self.button.destroy()
+            #     self.button = self.__next_button(self)
         self.count += 1
