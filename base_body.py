@@ -3,51 +3,60 @@ from tkinter.ttk import *
 from random import *
 import math
 
-RADIUS = 200 # Radius of user operable area
+# Scale of user operable are
+# Radisu = screen height/4*SCALE
+SCALE = 0.9
+# The minimum difference between mouse x and center x
+# Avoids extremely large slope of line
+MINIMUM_X_DIFF = 3
 
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
 
         Frame.__init__(self,parent)
         self.controller = controller
+        # Baseline task repetition counter
+        self.count = 1
+
+        # Radius of operable circle
+        self.radius = self.winfo_screenheight()/4*SCALE
+
+        # Mouse coordinates
+        self.mouse_x = 0
+        self.mouse_y = 0
 
         # Size of half-screen canvas
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()/2
-
-        # Continue button instance
-        self.button = self.__button(self)
         
         # Canvas instances
         self.upper_canvas = self.__upper_canvas(self)
         self.lower_canvas = self.__lower_canvas(self)
         
         # Reference line on upper canvas
-        self.upper_coords = self.rand_coor_on_circle(200,self.canvas_w,self.canvas_h)
-        self.upper_line = self.draw_line(self,self.upper_coords,'upper')
+        self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
+        self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
 
         # Operable line on lower canvas
-        self.lower_coords = self.h_coor_on_circle_lower(200,self.canvas_w,self.canvas_h)
-        self.lower_line = self.draw_line(self,self.lower_coords,'lower')
+        self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
+        self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
 
-        # Relative coordinate on lower canvas (not global height)
+        # Center coordinates of lower canvas (not screen coordinates)
         self.lower_center_x = self.canvas_w/2
         self.lower_center_y = self.winfo_screenheight()/4 
 
-        #TO DO: change 200 to global variable RADIUS
-        self.lower_canvas.create_oval(self.canvas_w/2-200,self.canvas_h/2-200,self.canvas_w/2+200,self.canvas_h/2+200,width = 2,
-        dash=(10,10))
+        # User operable area indicator
+        self.lower_canvas.create_oval(self.canvas_w/2-self.radius,
+                                      self.canvas_h/2-self.radius,
+                                      self.canvas_w/2+self.radius,
+                                      self.canvas_h/2+self.radius,
+                                      width = 2,
+                                      dash=(10,10))
+
+        self.lower_canvas.bind("<B1-Motion>", self.__drag)
         
-        # test rotate function
-        # self.lower_canvas.create_oval(self.canvas_w/2+50-5,self.canvas_h/2+60-5,self.canvas_w/2+50+5,self.canvas_h/2+60+5,fill="red")
-        # print('self canvas w',self.canvas_w)
-        # print('self canvas h',self.canvas_h)
-        #self.rotate_lower_line(self,x = self.canvas_w/2+50,y = self.canvas_h/2+60)
-    
-    def __button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("base_intro"))
-        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
-        return btn
+        # Continue button instance
+        self.button = self.__continue_button(self)
     
     def __upper_canvas(self,parent):
         cvs = Canvas(parent,
@@ -68,27 +77,23 @@ class BaseBodyGUI(Frame):
                   anchor="center")
         return cvs
     
+    def __continue_button(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
+        return btn
     
-    def draw_line(self,parent,coords,canvas):
+    def __next_button(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("TestIntroGUI"))
+        btn.place(relx=0.8166666666666667, rely=0.7, relwidth=0.08333333333333333, relheight=0.06)
+        return btn
+    
+    def __draw_line(self,parent,coords,canvas):
         if canvas == "upper":
-            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=20)
+            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
         elif canvas == 'lower':
-            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=20)
+            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
 
-    
-    def draw_point(self,parent,coor,r,canvas):
-        centerx = coor[0]
-        centery = coor[1]
-        if canvas == "upper":
-            return self.upper_canvas.create_oval(centerx-r, centery-r, centerx+r, centery+r, width = 2)
-        elif canvas == 'lower':
-            return self.lower_canvas.create_oval(centerx-r, centery-r, centerx+r, centery+r, width = 2)
-        #return self.canvas.create_oval(0,0,200,200, width = 2)
-    
-    def rand_coor(self):
-        return (randint(0,self.canvas_w/2),randint(0,self.canvas_h/2))
-
-    def rand_coor_on_circle(self,radius,w,h):
+    def __generate_coor_upper_line(self,radius,w,h):
         theta = math.radians(randint(0,359))
         center_x = w/2
         center_y = h/2
@@ -98,35 +103,56 @@ class BaseBodyGUI(Frame):
         point2_y = center_y-math.sin(theta)*radius        
         return (point1_x,point1_y,point2_x,point2_y)
     
-    def h_coor_on_circle_lower(self,radius,w,h):
+    def __generate_coor_lower_line(self,radius,w,h):
         theta = math.radians(0)
         center_x = w/2
         center_y = h/2
-        # print(center_x,center_y)
         point1_x = center_x+radius
         point1_y = center_y
         point2_x = center_x-radius
         point2_y = center_y        
         return (point1_x,point1_y,point2_x,point2_y)
 
-    def rotate_lower_line(self,parent,x,y):
-        # print(x)
-        # print(y)
-        # print(self.lower_center_x)
-        # print(self.lower_center_y)
-        # print(RADIUS)
-        # print("result",(x-self.lower_center_x)**2 + (y-self.lower_center_y)**2)
-        # print("radius sq", RADIUS**2)
-        if ((x-self.lower_center_x)**2 + (y-self.lower_center_y)**2) <= (RADIUS**2):
-            # print('1')
+    def __rotate_lower_line(self,parent,x,y):
+        if abs(x - self.lower_center_x) <= MINIMUM_X_DIFF:
+            new_p1_x = self.lower_center_x
+            new_p2_x = self.lower_center_x
+            if y <= self.lower_center_y:
+                new_p1_y = self.lower_center_y-self.radius
+                new_p2_y = self.lower_center_y+self.radius
+            else:
+                new_p1_y = self.lower_center_y+self.radius
+                new_p2_y = self.lower_center_y-self.radius
+        else:
             slope = (y-self.lower_center_y)/(x-self.lower_center_x)
             theta = math.atan(slope)
-            x_offset = math.cos(theta)*RADIUS
-            y_offset = math.sin(theta)*RADIUS
+            x_offset = math.cos(theta)*self.radius
+            y_offset = math.sin(theta)*self.radius
             new_p1_x = self.lower_center_x+x_offset
             new_p1_y = self.lower_center_y+y_offset
-            
             new_p2_x = self.lower_center_x-x_offset
             new_p2_y = self.lower_center_y-y_offset
-            # print(new_p1_x,new_p1_y,new_p2_x,new_p2_y)
-            self.lower_canvas.create_line(new_p1_x,new_p1_y,new_p2_x,new_p2_y,width=2)    
+        self.lower_canvas.delete(self.lower_line)
+        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
+    
+    def __drag(self,event):
+        if ((event.x-self.lower_center_x)**2 + (event.y-self.lower_center_y)**2) <= (self.radius**2):
+            self.mouse_x = event.x
+            self.mouse_y = event.y
+            self.__rotate_lower_line(self,self.mouse_x,self.mouse_y)
+
+    def __reset(self):
+        self.mouse_x = 0
+        self.mouse_y = 0
+
+        self.upper_canvas.delete(self.upper_line)
+        self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
+        self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
+
+        self.lower_canvas.delete(self.lower_line)
+        self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
+        self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+        if self.count == 9:
+            self.button.destroy()
+            self.button = self.__next_button(self)
+        self.count += 1

@@ -28,7 +28,7 @@ class BaseIntroGUI(Frame):
         btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
     
-    def __begin_button(self,parent):
+    def __next_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda : self.controller.show_frame("BaseBodyGUI"))
         btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
@@ -37,6 +37,6 @@ class BaseIntroGUI(Frame):
         self.label_intro.destroy()
         self.button.destroy()
         self.label_intro = self.__label_second_intro(self)
-        self.button = self.__begin_button(self)
+        self.button = self.__next_button(self)
         
 
