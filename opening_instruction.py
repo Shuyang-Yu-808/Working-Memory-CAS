@@ -3,7 +3,7 @@ from tkinter.ttk import *
 
 class IntroGUI(Frame):
     def __init__(self,parent,controller):
-
+        # print("inside")
         Frame.__init__(self,parent)
         self.controller = controller
         self.label_instruction = self.__label_instruction(self)

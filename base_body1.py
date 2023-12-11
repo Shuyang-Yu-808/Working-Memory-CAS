@@ -15,6 +15,38 @@ class BaseBodyGUI(Frame):
         Frame.__init__(self,parent)
         self.controller = controller
         # Baseline task repetition counter
+
+        self.label_intro = self.__label_first_intro(self)
+        self.button = self.__label_continue_button(self)
+
+
+    def __label_first_intro(self,parent):
+        label = Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
+                      font=("Arial", 25),
+                      anchor="center")
+        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
+        return label
+    
+
+    def __label_second_intro(self,parent):
+        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段，请你用鼠标调整下方的线段
+直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
+                      font=("Arial", 25),
+                      anchor="center")
+        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
+        return label
+
+
+    def __label_continue_button(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
+        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        return btn    
+
+    
+    def __set_up_baseline_task(self):
+        self.label_intro.destroy()
+        self.button.destroy()
+
         self.count = 1
 
         # Radius of operable circle
@@ -55,9 +87,18 @@ class BaseBodyGUI(Frame):
         self.lower_canvas.bind("<B1-Motion>", self.__drag)
         
         # Continue button instance
-        self.button = self.__continue_button(self)
+        self.button = self.__task_continue_button(self)
         self.base_result = []
         self.lower_line_slope = 0
+        self.timer = self.after(10000,self.__reset)
+        
+
+
+    def __next_to_task_button(self,parent):   
+        # btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
+        btn = Button(parent, text="继续", takefocus=False, command = lambda : self.__set_up_baseline_task())
+        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        return btn
 
 
     def __upper_canvas(self,parent):
@@ -79,16 +120,11 @@ class BaseBodyGUI(Frame):
                   anchor="center")
         return cvs
     
-    def __continue_button(self,parent):
+    def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
         btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
         return btn
     
-    # def __next_button(self,parent):
-    #     # btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame())
-    #     btn = Button(parent, text="继续", takefocus=False)
-    #     btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
-    #     return btn
     
     def __draw_line(self,parent,coords,canvas):
         if canvas == "upper":
@@ -153,8 +189,14 @@ class BaseBodyGUI(Frame):
 
 
     def __reset(self):
+        self.after_cancel(self.timer)
         self._update_base_result((self.upper_coords[3]-self.upper_coords[1])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
         if self.count == 10:
+            self.upper_canvas.delete("all")
+            self.lower_canvas.delete("all")
+            self.upper_canvas.destroy()
+            self.lower_canvas.destroy()
+            self.button.destroy()
             print(self.base_result)
             
         elif self.count < 10:
@@ -171,4 +213,15 @@ class BaseBodyGUI(Frame):
             # if self.count == 9:
             #     self.button.destroy()
             #     self.button = self.__next_button(self)
+            self.timer = self.after(10000,self.__reset)
+
         self.count += 1
+        # self.timer = self.after(10000,self.__reset)
+
+    
+    def __change_instruction(self):
+        self.label_intro.destroy()
+        self.button.destroy()
+        self.label_intro = self.__label_second_intro(self)
+        self.button = self.__next_to_task_button(self)
+        

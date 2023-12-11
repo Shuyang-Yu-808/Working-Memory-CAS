@@ -1,7 +1,7 @@
 from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from subject import Subject,IntervieweeNameError,GenderError,AgeError
-from base_body import BaseBodyGUI as Single #the frame for testing
+from base_body1 import BaseBodyGUI as Single #the frame for testing
 import tkinter as tk
 from tkinter import ttk
 
