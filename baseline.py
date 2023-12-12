@@ -90,7 +90,7 @@ class BaseBodyGUI(Frame):
         self.button = self.__task_continue_button(self)
         self.base_result = []
         self.lower_line_slope = 0
-        self.timer = self.after(10000,self.__reset)
+        self.timer = self.after(100000,self.__reset)
         
 
 
@@ -119,13 +119,9 @@ class BaseBodyGUI(Frame):
                   anchor="center")
         return cvs
     
+
     def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
-        return btn
-    
-    def __end_baseline_button(self,parent):
-        btn = Button(parent, text="完成", takefocus=False,command= lambda: self.controller.show_frame("TestIntroGUI"))
         btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
         return btn
     
@@ -140,6 +136,9 @@ class BaseBodyGUI(Frame):
         theta = math.radians(randint(0,359))
         center_x = w/2
         center_y = h/2
+        # print("upper center x ",center_x)
+        # print("upper center y ",center_y)
+
         point1_x = center_x+math.cos(theta)*radius
         point1_y = center_y+math.sin(theta)*radius
         point2_x = center_x-math.cos(theta)*radius
@@ -177,7 +176,7 @@ class BaseBodyGUI(Frame):
             new_p1_y = self.lower_center_y+y_offset
             new_p2_x = self.lower_center_x-x_offset
             new_p2_y = self.lower_center_y-y_offset
-            self.lower_line_slope = slope
+            self.lower_line_slope = (self.lower_center_y-y)/(x-self.lower_center_x)
         self.lower_canvas.delete(self.lower_line)
         self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
     
@@ -189,22 +188,30 @@ class BaseBodyGUI(Frame):
 
     def _update_base_result(self,slope1,slope2):
         theta1 = math.atan(slope1)
+        # print("theta 1",theta1)
         theta2 = math.atan(slope2)
+        # print("theta 2",theta2)
+
         self.base_result.append(abs(theta1-theta2))
 
 
     def __reset(self):
-        print(self.count)
+        # print(self.count)
+        # print("upper coords",self.upper_coords)
+        # print("lower coords",self.lower_coords)
         self.after_cancel(self.timer)
-        if self.upper_coords[2]-self.upper_coords[0] < MINIMUM_X_DIFF:
+
+        if abs(self.upper_coords[2]-self.upper_coords[0]) < MINIMUM_X_DIFF:
+            # print("in")
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
-            self._update_base_result((self.upper_coords[3]-self.upper_coords[1])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
-        if self.count == 10:
-            self.button.destroy()
-            self.button = self.__end_baseline_button(self)
+            self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
+        
+        if self.count >= 10:
+            # TODO: save result to json file locally 
             print(self.base_result)
-            
+            self.controller.show_frame("TestIntroGUI")
+                    
         elif self.count < 10:
             self.mouse_x = 0
             self.mouse_y = 0
@@ -216,7 +223,9 @@ class BaseBodyGUI(Frame):
             self.lower_canvas.delete(self.lower_line)
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
             self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-            self.timer = self.after(10000,self.__reset)
+            self.timer = self.after(100000,self.__reset)
+
+            # self.button = self.__end_baseline_button(self)
 
         self.count += 1
 
