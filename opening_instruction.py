@@ -21,6 +21,6 @@ class IntroGUI(Frame):
         return label
     
     def __button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("BaseIntroGUI"))
+        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("BaseBodyGUI"))
         btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn

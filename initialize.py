@@ -74,4 +74,4 @@ class StartPageGUI(Frame):
         except AgeError:
             self.label_error = self.__label_error(self, "年龄输入不正确，请重新输入。")
         else:
-            self.controller.show_frame("BaseIntroGUI")
+            self.controller.show_frame("IntroGUI")

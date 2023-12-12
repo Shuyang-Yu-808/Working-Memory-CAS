@@ -94,9 +94,8 @@ class BaseBodyGUI(Frame):
         
 
 
-    def __next_to_task_button(self,parent):   
-        # btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
-        btn = Button(parent, text="继续", takefocus=False, command = lambda : self.__set_up_baseline_task())
+    def __start_task_button(self,parent):   
+        btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
         btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
         return btn
 
@@ -122,6 +121,11 @@ class BaseBodyGUI(Frame):
     
     def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
+        return btn
+    
+    def __end_baseline_button(self,parent):
+        btn = Button(parent, text="完成", takefocus=False,command= lambda: self.controller.show_frame("TestIntroGUI"))
         btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
         return btn
     
@@ -163,6 +167,7 @@ class BaseBodyGUI(Frame):
             else:
                 new_p1_y = self.lower_center_y+self.radius
                 new_p2_y = self.lower_center_y-self.radius
+            self.lower_line_slope = float('inf')
         else:
             slope = (y-self.lower_center_y)/(x-self.lower_center_x)
             theta = math.atan(slope)
@@ -189,14 +194,15 @@ class BaseBodyGUI(Frame):
 
 
     def __reset(self):
+        print(self.count)
         self.after_cancel(self.timer)
-        self._update_base_result((self.upper_coords[3]-self.upper_coords[1])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
+        if self.upper_coords[2]-self.upper_coords[0] < MINIMUM_X_DIFF:
+            self._update_base_result(float('inf'),self.lower_line_slope)
+        else:
+            self._update_base_result((self.upper_coords[3]-self.upper_coords[1])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
         if self.count == 10:
-            self.upper_canvas.delete("all")
-            self.lower_canvas.delete("all")
-            self.upper_canvas.destroy()
-            self.lower_canvas.destroy()
             self.button.destroy()
+            self.button = self.__end_baseline_button(self)
             print(self.base_result)
             
         elif self.count < 10:
@@ -210,18 +216,14 @@ class BaseBodyGUI(Frame):
             self.lower_canvas.delete(self.lower_line)
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
             self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-            # if self.count == 9:
-            #     self.button.destroy()
-            #     self.button = self.__next_button(self)
             self.timer = self.after(10000,self.__reset)
 
         self.count += 1
-        # self.timer = self.after(10000,self.__reset)
 
     
     def __change_instruction(self):
         self.label_intro.destroy()
         self.button.destroy()
         self.label_intro = self.__label_second_intro(self)
-        self.button = self.__next_to_task_button(self)
+        self.button = self.__start_task_button(self)
         
