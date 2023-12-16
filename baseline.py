@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.ttk import *
 from random import *
 import math
+from config import *
 
 # Scale of user operable are
 # Radisu = screen height/4*SCALE
@@ -39,7 +40,7 @@ class BaseBodyGUI(Frame):
 
     def __label_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
-        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn    
 
     
@@ -90,13 +91,13 @@ class BaseBodyGUI(Frame):
         self.button = self.__task_continue_button(self)
         self.base_result = []
         self.lower_line_slope = 0
-        self.timer = self.after(100000,self.__reset)
+        self.timer = self.after(ms_to_wait,self.__reset)
         
 
 
     def __start_task_button(self,parent):   
         btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
-        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
 
 
@@ -122,7 +123,7 @@ class BaseBodyGUI(Frame):
 
     def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=0.81, rely=0.7, relwidth=0.083, relheight=0.06)
+        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
     
     
@@ -223,13 +224,16 @@ class BaseBodyGUI(Frame):
             self.lower_canvas.delete(self.lower_line)
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
             self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-            self.timer = self.after(100000,self.__reset)
+            self.timer = self.after(ms_to_wait,self.__reset)
 
             # self.button = self.__end_baseline_button(self)
 
         self.count += 1
 
-    
+    def write_result_to_file(self,datafile):
+        pass
+
+
     def __change_instruction(self):
         self.label_intro.destroy()
         self.button.destroy()
