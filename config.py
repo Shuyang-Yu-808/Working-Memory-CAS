@@ -3,3 +3,9 @@ next_button_rely = 0.7
 next_button_relwidth = 0.08
 next_button_relheight = 0.06
 ms_to_wait = 10000
+
+instruction_relx = 0.5
+instruction_rely = 0.5
+instruction_relwidth = 0.7
+instruction_relheight = 0.6
+
