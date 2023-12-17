@@ -4,7 +4,10 @@ from subject import Subject,IntervieweeNameError,GenderError,AgeError
 from practice import Practice as Single #the frame for testing
 import tkinter as tk
 from tkinter import ttk
-
+'''
+This is a helper function that runs on a single frame
+This function should be used for debugging purposes only
+'''
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk

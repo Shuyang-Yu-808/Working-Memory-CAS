@@ -29,7 +29,9 @@ class TkinterApp(tk.Tk):
             frame.grid(row = 0, column = 0, sticky ="nsew")
         self.show_frame("StartPageGUI")
 
-    # Window configuration
+    '''
+    Window configuration
+    '''
     def __win(self):
         self.title("工作记忆精确度实验")
         geometry = '%dx%d+%d+%d' % (self.winfo_screenwidth(),self.winfo_screenheight(),0,0)
@@ -38,12 +40,16 @@ class TkinterApp(tk.Tk):
         self.resizable(width=False, height=False)
 
     
-    # Displays the given frame
+    '''
+    Displays the given frame
+    '''
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
     
-    # Exits the program
+    '''
+    Exits the program
+    '''
     def exit(self):
         self.destroy()
 

@@ -6,6 +6,13 @@ E2 = Experiment("1_mirror",45)
 E3 = Experiment("3_normal",70)
 E4 = Experiment('4_mirror',70)
 
+'''
+The following three classes are customized exception classes used for initialize.py
+1. IntervieweeNameError should be called when name is not valid
+2. GenderError should be called when gender is any value other than “男” or "女"
+    sorry gender diversity :P
+3. AgeError should be called when age is not a positive integer
+'''
 class IntervieweeNameError(Exception):
     pass
 

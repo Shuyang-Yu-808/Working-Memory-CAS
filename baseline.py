@@ -16,7 +16,7 @@ class BaseBodyGUI(Frame):
         Frame.__init__(self,parent)
         self.controller = controller
         self.label_intro = self.__label_first_intro(self)
-        self.button = self.__label_continue_button(self)
+        self.button = self.__button_change_label(self)
 
 
     def __label_first_intro(self,parent):
@@ -28,20 +28,65 @@ class BaseBodyGUI(Frame):
     
 
     def __label_second_intro(self,parent):
-        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段，请你用鼠标调整下方的线段
-直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
+        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段，请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
                       font=("Arial", 25),
                       anchor="center")
         label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
         return label
 
+    '''
+    Canvas on the upper screen
+    '''
+    def __canvas_upper(self,parent):
+        cvs = Canvas(parent,
+                     width=self.winfo_screenwidth(),
+                     height=self.winfo_screenheight()/2,bg='#fff')
+        cvs.place(x=self.winfo_screenwidth()/2,
+                  y=self.winfo_screenheight()*(1/4),
+                  anchor="center")
+        return cvs
 
-    def __label_continue_button(self,parent):
+    '''
+    Canvas on the lower screen
+    '''
+    def __canvas_lower(self,parent):
+        cvs = Canvas(parent,
+                     width=self.winfo_screenwidth(),
+                     height=self.winfo_screenheight()/2,bg='#eee')
+        cvs.place(x=self.winfo_screenwidth()/2,
+                  y=self.winfo_screenheight()*(3/4),
+                  anchor="center")
+        return cvs
+    
+    '''
+    Button that sets up the baseline test
+    '''
+    def __button_start_task(self,parent):   
+        btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
+        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        return btn
+
+    '''
+    Button that resets the baseline test
+    '''
+    def __button_repeat_task(self,parent):
+        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        return btn
+    
+    '''
+    Button that calls to change label text
+    '''
+    def __button_change_label(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn    
 
-    
+    '''
+    Initialize a baseline test
+    1. New mouse coordinates
+    2. New widgets
+    '''
     def __set_up_baseline_task(self):
         self.label_intro.destroy()
         self.button.destroy()
@@ -59,8 +104,8 @@ class BaseBodyGUI(Frame):
         self.canvas_h = self.winfo_screenheight()/2
         
         # Canvas instances
-        self.upper_canvas = self.__upper_canvas(self)
-        self.lower_canvas = self.__lower_canvas(self)
+        self.upper_canvas = self.__canvas_upper(self)
+        self.lower_canvas = self.__canvas_lower(self)
         
         # Reference line on upper canvas format(x1,y1,x2,y2)
         self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
@@ -85,52 +130,11 @@ class BaseBodyGUI(Frame):
         self.lower_canvas.bind("<B1-Motion>", self.__drag)
         
         # Continue button instance
-        self.button = self.__task_continue_button(self)
+        self.button = self.__button_repeat_task(self)
         self.base_result = []
         self.lower_line_slope = 0
         self.timer = self.after(ms_to_wait,self.__reset)
         
-
-    '''
-    Creates a button that sets up the baseline test
-    '''
-    def __start_task_button(self,parent):   
-        btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
-        return btn
-
-    '''
-    Creates a canvas on the upper screen
-    '''
-    def __upper_canvas(self,parent):
-        cvs = Canvas(parent,
-                     width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight()/2,bg='#fff')
-        cvs.place(x=self.winfo_screenwidth()/2,
-                  y=self.winfo_screenheight()*(1/4),
-                  anchor="center")
-        return cvs
-
-    '''
-    Creates a canvas on the lower screen
-    '''
-    def __lower_canvas(self,parent):
-        cvs = Canvas(parent,
-                     width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight()/2,bg='#eee')
-        cvs.place(x=self.winfo_screenwidth()/2,
-                  y=self.winfo_screenheight()*(3/4),
-                  anchor="center")
-        return cvs
-    
-    '''
-    Creates a button that resets the baseline test
-    '''
-    def __task_continue_button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
-        return btn
-    
     '''
     Draws a line with specified:
     1. parent (this frame)
@@ -280,5 +284,5 @@ class BaseBodyGUI(Frame):
         self.label_intro.destroy()
         self.button.destroy()
         self.label_intro = self.__label_second_intro(self)
-        self.button = self.__start_task_button(self)
+        self.button = self.__button_start_task(self)
         

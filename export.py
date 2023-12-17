@@ -1,6 +1,11 @@
 from subject import Subject
 import csv
-
+'''
+This is a helper function that stores the experiment data
+1. export_to_text should only be called for debugging purposes
+2. export_to_csv should be called when exiting the program without any anomalies
+3. export_to_encoded should be called when exiting the program due to anomalies
+'''
 def export_to_text(subject):
     pass
 
@@ -23,3 +28,6 @@ def export_to_csv(subject,filename):
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(fields)
         csvwriter.writerow(row)
+
+def export_to_encoded(subject):
+    pass
