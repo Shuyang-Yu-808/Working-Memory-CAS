@@ -15,8 +15,6 @@ class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
         self.controller = controller
-        # Baseline task repetition counter
-
         self.label_intro = self.__label_first_intro(self)
         self.button = self.__label_continue_button(self)
 
@@ -47,9 +45,8 @@ class BaseBodyGUI(Frame):
     def __set_up_baseline_task(self):
         self.label_intro.destroy()
         self.button.destroy()
-
+        # Baseline test repetition counter
         self.count = 1
-
         # Radius of operable circle
         self.radius = self.winfo_screenheight()/4*SCALE
 
@@ -94,13 +91,17 @@ class BaseBodyGUI(Frame):
         self.timer = self.after(ms_to_wait,self.__reset)
         
 
-
+    '''
+    Creates a button that sets up the baseline test
+    '''
     def __start_task_button(self,parent):   
         btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
 
-
+    '''
+    Creates a canvas on the upper screen
+    '''
     def __upper_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
@@ -110,7 +111,9 @@ class BaseBodyGUI(Frame):
                   anchor="center")
         return cvs
 
-
+    '''
+    Creates a canvas on the lower screen
+    '''
     def __lower_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
@@ -120,45 +123,73 @@ class BaseBodyGUI(Frame):
                   anchor="center")
         return cvs
     
-
+    '''
+    Creates a button that resets the baseline test
+    '''
     def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
     
-    
+    '''
+    Draws a line with specified:
+    1. parent (this frame)
+    2. widget it's in (canvas)
+    3. coordinates (absolute coordinates within a canvas)
+    '''
     def __draw_line(self,parent,coords,canvas):
         if canvas == "upper":
             return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
         elif canvas == 'lower':
             return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
-
+        
+    '''
+    Creates the coordinates of a random line on the upper canvas
+    The line goes through the center of the upper canvas
+    '''
     def __generate_coor_upper_line(self,radius,w,h):
+        # random radian number
         theta = math.radians(randint(0,359))
+
+        # center of the upper canvas
         center_x = w/2
         center_y = h/2
-        # print("upper center x ",center_x)
-        # print("upper center y ",center_y)
 
+        # diagonal coordiantes that specifies an oval
         point1_x = center_x+math.cos(theta)*radius
         point1_y = center_y+math.sin(theta)*radius
         point2_x = center_x-math.cos(theta)*radius
         point2_y = center_y-math.sin(theta)*radius        
         return (point1_x,point1_y,point2_x,point2_y)
     
+    '''
+    Creates the coordinates of a horizontal line on the lower canvas
+    The line goes through the center of the operable circle (and the lower canvas)
+    '''
     def __generate_coor_lower_line(self,radius,w,h):
+        # horizontal
         theta = math.radians(0)
+
+        # center of the upper canvas
         center_x = w/2
         center_y = h/2
+        
+        # diagonal coordiantes that specifies an oval
         point1_x = center_x+radius
         point1_y = center_y
         point2_x = center_x-radius
         point2_y = center_y        
         return (point1_x,point1_y,point2_x,point2_y)
-
+    
+    '''
+    Rotates the line on the lower canvas
+    1. Delete the original line
+    2. Draws a line to the current mouse coordinates if x is MINIMUM_X_DIFF pixels away from the center
+        (Avoids inifinite slope)
+    3. Draws a vertical line if x isn't MINIMUM_X_DIFF pixels away from the center
+    '''
     def __rotate_lower_line(self,parent,x,y):
         if abs(x - self.lower_center_x) <= MINIMUM_X_DIFF:
-            # don't update the slope
             new_p1_x = self.lower_center_x
             new_p2_x = self.lower_center_x
             if y <= self.lower_center_y:
@@ -181,36 +212,44 @@ class BaseBodyGUI(Frame):
         self.lower_canvas.delete(self.lower_line)
         self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
     
+    '''
+    Detects mouse drag events inside the operable circle on the lower canvas
+    Updates mouse coordinates
+    Calls to rotate the line on the lower canvas
+    '''
     def __drag(self,event):
         if ((event.x-self.lower_center_x)**2 + (event.y-self.lower_center_y)**2) <= (self.radius**2):
             self.mouse_x = event.x
             self.mouse_y = event.y
             self.__rotate_lower_line(self,self.mouse_x,self.mouse_y)
-
+    
+    '''
+    Calculates baseline test result
+    Saves the result as class attribute
+    '''
     def _update_base_result(self,slope1,slope2):
         theta1 = math.atan(slope1)
-        # print("theta 1",theta1)
         theta2 = math.atan(slope2)
-        # print("theta 2",theta2)
-
         self.base_result.append(abs(theta1-theta2))
 
-
-    def __reset(self):
-        # print(self.count)
-        # print("upper coords",self.upper_coords)
-        # print("lower coords",self.lower_coords)
+    '''
+    Resets the current baseline test to its initial state
+    Starts a new baseline test
+    1. Calls the timer and resets the current baseline time if exceeds time limit
+    2. Records a vertical slope if slope is greater than minimum x coordinate difference
+    3. Calculates the slope if less than minimum x coordinate difference
+    4. Transits to the next frame if 10 baseline tests are completed
+    5. Saves the baseline test error
+    '''
+    def __reset(self): 
         self.after_cancel(self.timer)
-
-        if abs(self.upper_coords[2]-self.upper_coords[0]) < MINIMUM_X_DIFF:
-            # print("in")
+        if abs(self.upper_coords[2]-self.upper_coords[0]) < MINIMUM_X_DIFF: # Global in baseline.py
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
             self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
         
         if self.count >= 10:
-            # TODO: save result to json file locally 
-            print(self.base_result)
+            self.__save()
             self.controller.show_frame("TestIntroGUI")
                     
         elif self.count < 10:
@@ -225,15 +264,18 @@ class BaseBodyGUI(Frame):
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
             self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
             self.timer = self.after(ms_to_wait,self.__reset)
-
-            # self.button = self.__end_baseline_button(self)
-
         self.count += 1
 
-    def write_result_to_file(self,datafile):
-        pass
+    '''
+    Exports baseline data to attribute subject that is stored in the window instance
+    '''
+    def __save(self):
+        self.controller.subject.baseline_error = self.base_result
 
-
+    '''
+    Switches to the second part of the intro
+    Creates the button to start the tests
+    '''
     def __change_instruction(self):
         self.label_intro.destroy()
         self.button.destroy()
