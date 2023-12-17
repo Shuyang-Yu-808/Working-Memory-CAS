@@ -1,4 +1,3 @@
-import csv
 from collections import namedtuple
 Experiment = namedtuple("Experiment",['name','N_sets'])
 
@@ -22,12 +21,7 @@ class Subject:
         self.lastname = lastname
         self.age = age
         self.gender = gender
-        #self.experiment = experiment
-        self.diff_in_rad = {}
-        self.reaction_time = {}
-        #for i in range(experiment.N_sets):
-        #    self.diff_in_rad[i] = -1
-        #    self.reaction_time[i] = -1
+        self.baseline_error = []
 
     def examine(self):
         flag = True
@@ -43,23 +37,4 @@ class Subject:
 
     # def insert_exp_result_into(self,reactiontime,)
 
-    def export_to_csv(self,filename):
-        fields = ['名', '姓', '年龄', '性别']
-        fields.append(self.experiment.name)
-        row = []    
-        row.append(self.firstname)
-        row.append(self.lastname)
-        row.append(self.age)
-        row.append(self.gender)
-        for i in range(self.experiment.N_sets):
-            fields.append(f"试次{i+1}角度差")
-            fields.append(f"试次{i+1}反应时间")
-
-            row.append(self.diff_in_rad[i])
-            row.append(self.reaction_time[i])
-
-        with open(filename, 'w') as csvfile:  
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(fields)
-            csvwriter.writerow(row)
         

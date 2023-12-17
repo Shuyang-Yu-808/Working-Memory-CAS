@@ -4,12 +4,14 @@ from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from baseline import BaseBodyGUI
 from test_instruction import TestIntroGUI
+from subject import Subject
 
-class tkinterApp(tk.Tk):
+class TkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
         tk.Tk.__init__(self, *args, **kwargs)
         self.__win()
+        self.subject = None
 
         # Creats a container
         container = tk.Frame(self)
@@ -47,5 +49,5 @@ class tkinterApp(tk.Tk):
 
 
 
-app = tkinterApp()
+app = TkinterApp()
 app.mainloop()
