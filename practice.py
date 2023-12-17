@@ -17,6 +17,8 @@ class Practice(Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
         self.controller = controller
+        # Frame.config(self,bg="white")
+        # self.bg = "white"
         # Baseline task repetition counter
 
         self.label_intro = self.__label_intro(self)
@@ -24,6 +26,7 @@ class Practice(Frame):
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()
         self.count = 1
+
 
         # Radius of operable circle
         self.radius = self.winfo_screenheight()/4*SCALE
@@ -34,7 +37,7 @@ class Practice(Frame):
         # Size of full-screen canvas
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()
-
+        
 
     def __label_intro(self,parent):
         label = Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“开始”按钮继续。''',
@@ -63,16 +66,19 @@ class Practice(Frame):
 
         self.after(500)
         self.canvas.delete(self.line)
+        self.canvas.destroy()
+
         image1 = Image.open("visual_masking.png")
         test = ImageTk.PhotoImage(image1)
         label1 = Label(image=test)
         label1.image = test
-        label1.place(relx=instruction_relx, rely=instruction_rely)
-
-
-        # # Operable line on lower canvas
-        # self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-        # self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+        label1.place(relx=instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=instruction_rely-(image1.size[1]/2)/self.canvas_h)
+        # self.after(500,label1.destroy)
+        self.after(500)
+        label1.destroy()
+        self.canvas = self.__full_screen_canvas(self)
+        self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
+        self.lower_line = self.__draw_line(self,self.todo_coords)
 
         # # Center coordinates of lower canvas (not screen coordinates)
         # self.lower_center_x = self.canvas_w/2
@@ -127,8 +133,7 @@ class Practice(Frame):
         point2_y = center_y-math.sin(theta)*radius        
         return (point1_x,point1_y,point2_x,point2_y)
     
-    def __generate_coor_lower_line(self,radius,w,h):
-        theta = math.radians(0)
+    def __generate_todo_coor_line(self,radius,w,h):
         center_x = w/2
         center_y = h/2
         point1_x = center_x+radius
