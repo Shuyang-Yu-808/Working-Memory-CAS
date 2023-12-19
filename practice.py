@@ -183,7 +183,8 @@ class Practice(Frame):
     def __reset(self):
         if not self._is_good_result():
             if self.count > 9:
-                self.controller.show_frame("TestIntroGUI")
+                print("you did shit. Exit pls")
+                # self.controller.show_frame("TestIntroGUI")
             else:
                 self.canvas.delete("all")
                 self.canvas.destroy()
@@ -191,7 +192,7 @@ class Practice(Frame):
                 self.button = self.__start_task_button(self)
         else:
             print("you did well")
-            self.controller.show_frame("TestIntroGUI")
+            # self.controller.show_frame("TestIntroGUI")
 
 
     def _try_again_label(self,parent):
