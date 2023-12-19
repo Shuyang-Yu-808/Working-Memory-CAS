@@ -63,7 +63,6 @@ class Practice(Frame):
         self.coords = self.__generate_coor_line(self.radius,self.canvas_w,self.canvas_h)
         self.line = self.__draw_line(self,self.coords)
 
-
         self.after(500)
         self.canvas.delete(self.line)
         self.canvas.destroy()
@@ -73,31 +72,30 @@ class Practice(Frame):
         label1 = Label(image=test)
         label1.image = test
         label1.place(relx=instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=instruction_rely-(image1.size[1]/2)/self.canvas_h)
-        # self.after(500,label1.destroy)
         self.after(500)
         label1.destroy()
         self.canvas = self.__full_screen_canvas(self)
         self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
-        self.lower_line = self.__draw_line(self,self.todo_coords)
+        self.todo_line = self.__draw_line(self,self.todo_coords)
 
-        # # Center coordinates of lower canvas (not screen coordinates)
-        # self.lower_center_x = self.canvas_w/2
-        # self.lower_center_y = self.winfo_screenheight()/4 
+        # Center coordinates of the canvas (not screen coordinates)
+        self.center_x = self.canvas_w/2
+        self.center_y = self.canvas_h/2 
 
-        # # User operable area indicator
-        # self.lower_canvas.create_oval(self.canvas_w/2-self.radius,
-        #                               self.canvas_h/2-self.radius,
-        #                               self.canvas_w/2+self.radius,
-        #                               self.canvas_h/2+self.radius,
-        #                               width = 2,
-        #                               dash=(10,10))
+        # User operable area indicator
+        self.canvas.create_oval(self.canvas_w/2-self.radius,
+                                      self.canvas_h/2-self.radius,
+                                      self.canvas_w/2+self.radius,
+                                      self.canvas_h/2+self.radius,
+                                      width = 2,
+                                      dash=(10,10))
 
-        # self.lower_canvas.bind("<B1-Motion>", self.__drag)
+        self.canvas.bind("<B1-Motion>", self.__drag)
         
         # # Continue button instance
-        # self.button = self.__task_continue_button(self)
-        # self.base_result = []
-        # self.lower_line_slope = 0
+        self.button = self.__task_continue_button(self)
+
+        self.todo_line_slope = 0
         # self.timer = self.after(ms_to_wait,self.__reset)
 
     def __full_screen_canvas(self,parent):
@@ -124,8 +122,6 @@ class Practice(Frame):
         theta = math.radians(randint(0,359))
         center_x = w/2
         center_y = h/2
-        # print("upper center x ",center_x)
-        # print("upper center y ",center_y)
 
         point1_x = center_x+math.cos(theta)*radius
         point1_y = center_y+math.sin(theta)*radius
@@ -142,79 +138,69 @@ class Practice(Frame):
         point2_y = center_y        
         return (point1_x,point1_y,point2_x,point2_y)
 
-    def __rotate_lower_line(self,parent,x,y):
-        if abs(x - self.lower_center_x) <= MINIMUM_X_DIFF:
+    def __rotate_line(self,parent,x,y):
+        if abs(x - self.center_x) <= MINIMUM_X_DIFF:
             # don't update the slope
-            new_p1_x = self.lower_center_x
-            new_p2_x = self.lower_center_x
-            if y <= self.lower_center_y:
-                new_p1_y = self.lower_center_y-self.radius
-                new_p2_y = self.lower_center_y+self.radius
+            new_p1_x = self.center_x
+            new_p2_x = self.center_x
+            if y <= self.center_y:
+                new_p1_y = self.center_y-self.radius
+                new_p2_y = self.center_y+self.radius
             else:
-                new_p1_y = self.lower_center_y+self.radius
-                new_p2_y = self.lower_center_y-self.radius
-            self.lower_line_slope = float('inf')
+                new_p1_y = self.center_y+self.radius
+                new_p2_y = self.center_y-self.radius
+            self.todo_line_slope = float('inf')
         else:
-            slope = (y-self.lower_center_y)/(x-self.lower_center_x)
+            slope = (y-self.center_y)/(x-self.center_x)
             theta = math.atan(slope)
             x_offset = math.cos(theta)*self.radius
             y_offset = math.sin(theta)*self.radius
-            new_p1_x = self.lower_center_x+x_offset
-            new_p1_y = self.lower_center_y+y_offset
-            new_p2_x = self.lower_center_x-x_offset
-            new_p2_y = self.lower_center_y-y_offset
-            self.lower_line_slope = (self.lower_center_y-y)/(x-self.lower_center_x)
-        self.lower_canvas.delete(self.lower_line)
-        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
+            new_p1_x = self.center_x+x_offset
+            new_p1_y = self.center_y+y_offset
+            new_p2_x = self.center_x-x_offset
+            new_p2_y = self.center_y-y_offset
+            self.todo_line_slope = (self.center_y-y)/(x-self.center_x)
+        self.canvas.delete(self.todo_line)
+        self.todo_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y])    
     
+
     def __drag(self,event):
-        if ((event.x-self.lower_center_x)**2 + (event.y-self.lower_center_y)**2) <= (self.radius**2):
+        if ((event.x-self.center_x)**2 + (event.y-self.center_y)**2) <= (self.radius**2):
             self.mouse_x = event.x
             self.mouse_y = event.y
-            self.__rotate_lower_line(self,self.mouse_x,self.mouse_y)
+            self.__rotate_line(self,self.mouse_x,self.mouse_y)
 
-    def _update_base_result(self,slope1,slope2):
-        theta1 = math.atan(slope1)
-        # print("theta 1",theta1)
-        theta2 = math.atan(slope2)
-        # print("theta 2",theta2)
 
-        self.base_result.append(abs(theta1-theta2))
-
+    def _is_good_result(self):
+        if abs(self.coords[2]-self.coords[0]) < MINIMUM_X_DIFF:
+            theta1 = math.atan(float('inf'))
+        else:
+            theta1 = math.atan((self.coords[1]-self.coords[3])/(self.coords[2]-self.coords[0]))
+        theta2 = math.atan(self.todo_line_slope)
+        return abs(theta1-theta2) < 10*math.pi/180
+    
 
     def __reset(self):
-        # print(self.count)
-        # print("upper coords",self.upper_coords)
-        # print("lower coords",self.lower_coords)
-        self.after_cancel(self.timer)
-
-        if abs(self.upper_coords[2]-self.upper_coords[0]) < MINIMUM_X_DIFF:
-            # print("in")
-            self._update_base_result(float('inf'),self.lower_line_slope)
+        if not self._is_good_result():
+            if self.count > 9:
+                self.controller.show_frame("TestIntroGUI")
+            else:
+                self.canvas.delete("all")
+                self.canvas.destroy()
+                self.label_intro = self._try_again_label(self)
+                self.button = self.__start_task_button(self)
         else:
-            self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
-        
-        if self.count >= 10:
-            # TODO: save result to json file locally 
-            print(self.base_result)
+            print("you did well")
             self.controller.show_frame("TestIntroGUI")
-                    
-        elif self.count < 10:
-            self.mouse_x = 0
-            self.mouse_y = 0
 
-            self.upper_canvas.delete(self.upper_line)
-            self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
-            self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
 
-            self.lower_canvas.delete(self.lower_line)
-            self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-            self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-            self.timer = self.after(ms_to_wait,self.__reset)
-
-            # self.button = self.__end_baseline_button(self)
-
-        self.count += 1
+    def _try_again_label(self,parent):
+        label = Label(parent,text='''角度不相符，请按“开始”按钮再次尝试''',
+            font=("Arial", 25),
+            anchor="center")
+        label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
+        return label
+    
 
     def write_result_to_file(self,datafile):
         pass
