@@ -88,7 +88,7 @@ class Practice(Frame):
                                       self.canvas_w/2+self.radius,
                                       self.canvas_h/2+self.radius,
                                       width = 2,
-                                      dash=(10,10))
+                                      dash=(25,25),outline = 'white')
 
         self.canvas.bind("<B1-Motion>", self.__drag)
         
