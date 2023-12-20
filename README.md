@@ -20,5 +20,4 @@
 # TODO:
     1. Comments
     2. Drag-to-rotate
-    3. Adaptive interface
-    4. practice change frame background color 
+    3. Adaptive interface 

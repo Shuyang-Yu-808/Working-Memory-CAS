@@ -13,7 +13,7 @@ SCALE = 0.9
 # Avoids extremely large slope of line
 MINIMUM_X_DIFF = 3
 
-class Practice(Frame):
+class mainTask (Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
         self.controller = controller
@@ -40,14 +40,14 @@ class Practice(Frame):
         
 
     def __label_intro(self,parent):
-        label = Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“继续”按钮开始。''',
+        label = Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“开始”按钮继续。''',
                       font=("Arial", 25),
                       anchor="center")
         label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
         return label
     
     def __start_task_button(self,parent):   
-        btn = Button(parent, text="继续", takefocus=False, command = lambda : self.__set_up_task())
+        btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_task())
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
 
@@ -64,9 +64,9 @@ class Practice(Frame):
         self.line = self.__draw_line(self,self.coords)
 
         self.after(500)
-        self.canvas.delete("all")
+        self.canvas.delete(self.line)
         self.canvas.destroy()
-        self.button.destroy()
+
         image1 = Image.open("visual_masking.png")
         test = ImageTk.PhotoImage(image1)
         label1 = Label(image=test)
@@ -101,7 +101,7 @@ class Practice(Frame):
     def __full_screen_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight())
+                     height=self.winfo_screenheight(),bg='#fff')
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()/2,
                   anchor="center")
@@ -190,14 +190,13 @@ class Practice(Frame):
                 self.canvas.destroy()
                 self.label_intro = self._try_again_label(self)
                 self.button = self.__start_task_button(self)
-            self.count += 1
         else:
             print("you did well")
             # self.controller.show_frame("TestIntroGUI")
 
 
     def _try_again_label(self,parent):
-        label = Label(parent,text='''角度不相符，请按“继续”按钮再次尝试''',
+        label = Label(parent,text='''角度不相符，请按“开始”按钮再次尝试''',
             font=("Arial", 25),
             anchor="center")
         label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
