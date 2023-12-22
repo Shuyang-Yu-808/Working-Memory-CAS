@@ -9,3 +9,6 @@ instruction_rely = 0.5
 instruction_relwidth = 0.7
 instruction_relheight = 0.6
 
+pixels_between_dash = 25
+
+n_test_set_single_line = 45

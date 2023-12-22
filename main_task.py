@@ -26,7 +26,9 @@ class mainTask (Frame):
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()
         self.count = 1
-
+        
+        #store experiment results
+        self.results = []
 
         # Radius of operable circle
         self.radius = self.winfo_screenheight()/4*SCALE
@@ -88,10 +90,10 @@ class mainTask (Frame):
                                       self.canvas_w/2+self.radius,
                                       self.canvas_h/2+self.radius,
                                       width = 2,
-                                      dash=(10,10))
+                                      dash=(pixels_between_dash,pixels_between_dash))
 
         self.canvas.bind("<B1-Motion>", self.__drag)
-        
+        print(self.count)        
         # # Continue button instance
         self.button = self.__task_continue_button(self)
 
@@ -171,37 +173,53 @@ class mainTask (Frame):
             self.__rotate_line(self,self.mouse_x,self.mouse_y)
 
 
-    def _is_good_result(self):
+    def _update_result(self):
         if abs(self.coords[2]-self.coords[0]) < MINIMUM_X_DIFF:
             theta1 = math.atan(float('inf'))
         else:
             theta1 = math.atan((self.coords[1]-self.coords[3])/(self.coords[2]-self.coords[0]))
         theta2 = math.atan(self.todo_line_slope)
-        return abs(theta1-theta2) < 10*math.pi/180
+        self.results.append(abs(theta1-theta2))
     
 
     def __reset(self):
-        if not self._is_good_result():
-            if self.count > 9:
-                print("you did shit. Exit pls")
-                # self.controller.show_frame("TestIntroGUI")
-            else:
-                self.canvas.delete("all")
-                self.canvas.destroy()
-                self.label_intro = self._try_again_label(self)
-                self.button = self.__start_task_button(self)
+        self._update_result()
+        self.count +=1
+        if self.count > 10:
+            self.canvas.delete("all")
+            self.canvas.destroy()
+            self.button.destroy()
+            self.label_intro = self._label_ending(self)
+            print(self.results)
+        elif self.count == 5:
+            self.canvas.delete("all")
+            self.canvas.destroy()
+            self.button.destroy()
+            self.label_intro = self._label_take_a_break(self)
+            self.button = self.__start_task_button(self)
         else:
-            print("you did well")
-            # self.controller.show_frame("TestIntroGUI")
+            self.canvas.delete("all")
+            self.canvas.destroy()
+            self.button.destroy()
+            # self.label_intro = self._label_ending(self)
+            self.__set_up_task()
 
 
-    def _try_again_label(self,parent):
-        label = Label(parent,text='''角度不相符，请按“开始”按钮再次尝试''',
-            font=("Arial", 25),
-            anchor="center")
+    def _label_take_a_break(self,parent):
+        label = Label(parent,text='''目前为止你做得很好！现在闭目或远眺休息眼睛，若感觉状态回复则可点击“开始”按钮继续。''',
+                      font=("Arial", 25),
+                      anchor="center")
         label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
         return label
-    
+
+
+    def _label_ending(self,parent):
+        label = Label(parent,text='''实验结束！再次感谢你参与本次心理学实验！。''',
+                      font=("Arial", 25),
+                      anchor="center")
+        label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
+        return label
+
 
     def write_result_to_file(self,datafile):
         pass

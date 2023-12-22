@@ -40,7 +40,8 @@ class Practice(Frame):
         
 
     def __label_intro(self,parent):
-        label = Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“继续”按钮开始。''',
+        label = Label(parent,text='''你做得很好！下面，我们来做一个实验练练手，检测一下你是否完全理解了指导
+语的意思。单击鼠标右键继续。''',
                       font=("Arial", 25),
                       anchor="center")
         label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
@@ -189,6 +190,7 @@ class Practice(Frame):
                 self.canvas.delete("all")
                 self.canvas.destroy()
                 self.label_intro = self._try_again_label(self)
+                self.button.destroy()
                 self.button = self.__start_task_button(self)
             self.count += 1
         else:
