@@ -3,7 +3,7 @@ from tkinter import ttk
 from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from baseline import BaseBodyGUI
-from test_instruction import TestIntroGUI
+from main_task import MainTaskGUI
 from subject import Subject
 
 class TkinterApp(tk.Tk):
@@ -22,7 +22,7 @@ class TkinterApp(tk.Tk):
   
         # Initializes an array of frames
         self.frames = {}
-        for F in (StartPageGUI, IntroGUI,BaseBodyGUI,TestIntroGUI):
+        for F in (StartPageGUI,IntroGUI,BaseBodyGUI,MainTaskGUI):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame 

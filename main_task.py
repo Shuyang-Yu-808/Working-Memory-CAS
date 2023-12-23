@@ -13,7 +13,7 @@ SCALE = 0.9
 # Avoids extremely large slope of line
 MINIMUM_X_DIFF = 3
 
-class mainTask (Frame):
+class MainTaskGUI (Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
         self.controller = controller
@@ -93,7 +93,7 @@ class mainTask (Frame):
                                       dash=(pixels_between_dash,pixels_between_dash),outline = 'white')
 
         self.canvas.bind("<B1-Motion>", self.__drag)
-        print(self.count)        
+        # print(self.count)        
         # # Continue button instance
         self.button = self.__task_continue_button(self)
 

@@ -28,7 +28,8 @@ class BaseBodyGUI(Frame):
     
 
     def __label_second_intro(self,parent):
-        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段，请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
+        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段。
+请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
                       font=("Arial", 25),
                       anchor="center")
         label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
@@ -254,7 +255,7 @@ class BaseBodyGUI(Frame):
         
         if self.count >= 10:
             self.__save()
-            self.controller.show_frame("TestIntroGUI")
+            self.controller.show_frame("MainTaskGUI")
                     
         elif self.count < 10:
             self.mouse_x = 0
