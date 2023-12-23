@@ -90,7 +90,7 @@ class mainTask (Frame):
                                       self.canvas_w/2+self.radius,
                                       self.canvas_h/2+self.radius,
                                       width = 2,
-                                      dash=(pixels_between_dash,pixels_between_dash))
+                                      dash=(pixels_between_dash,pixels_between_dash),outline = 'white')
 
         self.canvas.bind("<B1-Motion>", self.__drag)
         print(self.count)        
@@ -103,7 +103,7 @@ class mainTask (Frame):
     def __full_screen_canvas(self,parent):
         cvs = Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight(),bg='#fff')
+                     height=self.winfo_screenheight())
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()/2,
                   anchor="center")
@@ -185,13 +185,13 @@ class mainTask (Frame):
     def __reset(self):
         self._update_result()
         self.count +=1
-        if self.count > 10:
+        if self.count > n_test_set_single_line:
             self.canvas.delete("all")
             self.canvas.destroy()
             self.button.destroy()
             self.label_intro = self._label_ending(self)
             print(self.results)
-        elif self.count == 5:
+        elif self.count == n_test_set_single_line//2 + 1:
             self.canvas.delete("all")
             self.canvas.destroy()
             self.button.destroy()
@@ -201,7 +201,6 @@ class mainTask (Frame):
             self.canvas.delete("all")
             self.canvas.destroy()
             self.button.destroy()
-            # self.label_intro = self._label_ending(self)
             self.__set_up_task()
 
 
