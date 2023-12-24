@@ -1,5 +1,4 @@
 import tkinter as tk
-# import tkmacosx as tk
 import tkinter.ttk as ttk
 
 from random import *
@@ -20,11 +19,8 @@ class MainTaskGUI (tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent,bg = "grey")
         self.controller = controller
-        # Frame.config(self,bg="white")
-        # self.bg = "white"
+
         # Baseline task repetition counter
-        # self.config()
-        # self.configure(bg = "grey")
         self.label_intro = self.__label_intro(self)
         self.button = self.__start_task_button(self)
         self.canvas_w = self.winfo_screenwidth()
@@ -53,8 +49,8 @@ class MainTaskGUI (tk.Frame):
         return label
     
     def __start_task_button(self,parent):   
-        btn = tk.Button(parent, text="开始", fg = "white", bg = "grey", takefocus=False, command = lambda : self.__set_up_task())
-        # btn = macTkButton(parent, text="开始", fg = "white", bg = "grey", takefocus=False, command = lambda : self.__set_up_task())
+        btn = tk.Button(parent, text="开始", bg = "white", takefocus=False, command = lambda : self.__set_up_task())
+        # btn = macTkButton(parent, text="开始", bg = "white", takefocus=False, command = lambda : self.__set_up_task())
        
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
@@ -117,8 +113,8 @@ class MainTaskGUI (tk.Frame):
 
 
     def __task_continue_button(self,parent):
-        btn = tk.Button(parent, text="继续",bg = "grey", fg = "white", takefocus=False,command= lambda: self.__reset())
-        # btn = macTkButton(parent, text="继续",bg = "grey", fg = "white",takefocus=False,command= lambda: self.__reset())
+        btn = tk.Button(parent, text="继续",bg = "white", takefocus=False,command= lambda: self.__reset())
+        # btn = macTkButton(parent, text="继续",bg = "white",takefocus=False,command= lambda: self.__reset())
         btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
         return btn
     
