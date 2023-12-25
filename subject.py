@@ -29,6 +29,7 @@ class Subject:
         self.age = age
         self.gender = gender
         self.baseline_error = []
+        self.maintask_error = []
 
     def examine(self):
         flag = True
@@ -42,6 +43,9 @@ class Subject:
             if int(self.age)!=float(self.age) or int(self.age)<=0:
                 raise AgeError
 
-    # def insert_exp_result_into(self,reactiontime,)
+    def is_complete(self):
+        if len(self.baseline_error) == 10 and len(self.maintask_error) == 10:
+            return True
+        return False
 
         

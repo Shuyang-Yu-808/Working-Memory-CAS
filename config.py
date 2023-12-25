@@ -1,14 +1,24 @@
-next_button_relx = 0.8
-next_button_rely = 0.7
-next_button_relwidth = 0.08
-next_button_relheight = 0.06
-ms_to_wait = 10000
+import configparser
+import os
+class Config():
+    def __init__(self):
+        conf = configparser.ConfigParser()
+        curpath = os.path.dirname(os.path.realpath(__file__))
+        path = os.path.join(curpath,'config.ini')
+        conf.read(path,encoding="utf-8")
+        self.next_button_relx=float(conf['UI']['next_button_relx'])
+        self.next_button_rely=float(conf['UI']['next_button_rely'])
+        self.next_button_relwidth=float(conf['UI']['next_button_relwidth'])
+        self.next_button_relheight=float(conf['UI']['next_button_relheight'])
+        self.instruction_relx=float(conf['UI']['instruction_relx'])
+        self.instruction_rely=float(conf['UI']['instruction_rely'])
+        self.instruction_relwidth=float(conf['UI']['instruction_relwidth'])
+        self.instruction_relheight=float(conf['UI']['instruction_relheight'])
+        self.pixels_between_dash=int(conf['UI']['pixels_between_dash'])
+        self.scale=float(conf['UI']['scale'])
+        self.ms_to_wait=int(conf['Experiment']['ms_to_wait'])
+        self.n_test_set_single_line=int(conf['Experiment']['n_test_set_single_line'])
+        self.minimum_x_diff=int(conf['Experiment']['minimum_x_diff'])
+        self.csv_filename=conf['Data']['csv_filename']
 
-instruction_relx = 0.5
-instruction_rely = 0.5
-instruction_relwidth = 0.7
-instruction_relheight = 0.6
-
-pixels_between_dash = 25
-
-n_test_set_single_line = 45
+conf = Config()

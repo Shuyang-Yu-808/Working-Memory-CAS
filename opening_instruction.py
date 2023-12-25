@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from config import conf
 
 class IntroGUI(Frame):
     def __init__(self,parent,controller):
@@ -16,10 +17,17 @@ class IntroGUI(Frame):
 线段的朝向，之后用鼠标按照你记忆的方向调整相应颜色线段的朝向。确认调整好后单击“继续”按钮以继续实
 验。如果已经理解指导语，请点击“继续”按钮''',anchor="center",
         font=("Arial",25))
-        label.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2, anchor=CENTER,relwidth=1, relheight=1)
+        label.place(relx=conf.instruction_relx,
+                    rely=conf.instruction_rely,
+                    anchor=CENTER,
+                    relwidth=conf.instruction_relwidth,
+                    relheight=conf.instruction_relheight)
         return label
     
     def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.controller.show_frame("BaseBodyGUI"))
-        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
         return btn

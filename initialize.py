@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
 from subject import Subject,IntervieweeNameError,GenderError,AgeError
-
+from config import conf
 class StartPageGUI(Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
@@ -64,7 +64,10 @@ class StartPageGUI(Frame):
     
     def __button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command=lambda: self.__validation())
-        btn.place(relx=0.8, rely=0.7, relwidth=0.08, relheight=0.06)
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
         return btn
     
     '''

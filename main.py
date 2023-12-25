@@ -5,7 +5,8 @@ from opening_instruction import IntroGUI
 from baseline import BaseBodyGUI
 from main_task import MainTaskGUI
 from subject import Subject
-
+import export
+from config import conf
 class TkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
@@ -57,3 +58,7 @@ class TkinterApp(tk.Tk):
 
 app = TkinterApp()
 app.mainloop()
+if app.subject.is_complete():
+    export.export_to_csv(app.subject,conf.csv_filename)
+else:
+    export.export_to_log(app.subject)

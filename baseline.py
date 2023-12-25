@@ -2,15 +2,8 @@ from tkinter import *
 from tkinter.ttk import *
 from random import *
 import math
-from config import *
-
-# Scale of user operable are
-# Radisu = screen height/4*SCALE
-SCALE = 0.9
-# The minimum difference between mouse x and center x
-# Avoids extremely large slope of line
-MINIMUM_X_DIFF = 3
-
+import timer
+from config import conf
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
@@ -23,7 +16,11 @@ class BaseBodyGUI(Frame):
         label = Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
                       font=("Arial", 25),
                       anchor="center")
-        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
+        label.place(relx=conf.instruction_relx,
+                    rely=conf.instruction_rely,
+                    anchor=CENTER,
+                    relwidth=conf.instruction_relwidth,
+                    relheight=conf.instruction_relheight)
         return label
     
 
@@ -32,7 +29,11 @@ class BaseBodyGUI(Frame):
 请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
                       font=("Arial", 25),
                       anchor="center")
-        label.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.6,anchor = CENTER)
+        label.place(relx=conf.instruction_relx,
+                    rely=conf.instruction_rely,
+                    anchor=CENTER,
+                    relwidth=conf.instruction_relwidth,
+                    relheight=conf.instruction_relheight)
         return label
 
     '''
@@ -64,7 +65,10 @@ class BaseBodyGUI(Frame):
     '''
     def __button_start_task(self,parent):   
         btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
         return btn
 
     '''
@@ -72,7 +76,10 @@ class BaseBodyGUI(Frame):
     '''
     def __button_repeat_task(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
         return btn
     
     '''
@@ -80,7 +87,10 @@ class BaseBodyGUI(Frame):
     '''
     def __button_change_label(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
         return btn    
 
     '''
@@ -94,7 +104,7 @@ class BaseBodyGUI(Frame):
         # Baseline test repetition counter
         self.count = 1
         # Radius of operable circle
-        self.radius = self.winfo_screenheight()/4*SCALE
+        self.radius = self.winfo_screenheight()/4*conf.scale
 
         # Mouse coordinates
         self.mouse_x = 0
@@ -134,7 +144,7 @@ class BaseBodyGUI(Frame):
         self.button = self.__button_repeat_task(self)
         self.base_result = []
         self.lower_line_slope = 0
-        self.timer = self.after(ms_to_wait,self.__reset)
+        self.timer = self.after(conf.ms_to_wait,self.__reset)
         
     '''
     Draws a line with specified:
@@ -189,12 +199,12 @@ class BaseBodyGUI(Frame):
     '''
     Rotates the line on the lower canvas
     1. Delete the original line
-    2. Draws a line to the current mouse coordinates if x is MINIMUM_X_DIFF pixels away from the center
+    2. Draws a line to the current mouse coordinates if x is conf.minimum_x_diff pixels away from the center
         (Avoids inifinite slope)
-    3. Draws a vertical line if x isn't MINIMUM_X_DIFF pixels away from the center
+    3. Draws a vertical line if x isn't conf.minimum_x_diff pixels away from the center
     '''
     def __rotate_lower_line(self,parent,x,y):
-        if abs(x - self.lower_center_x) <= MINIMUM_X_DIFF:
+        if abs(x - self.lower_center_x) <= conf.minimum_x_diff:
             new_p1_x = self.lower_center_x
             new_p2_x = self.lower_center_x
             if y <= self.lower_center_y:
@@ -248,7 +258,7 @@ class BaseBodyGUI(Frame):
     '''
     def __reset(self): 
         self.after_cancel(self.timer)
-        if abs(self.upper_coords[2]-self.upper_coords[0]) < MINIMUM_X_DIFF: # Global in baseline.py
+        if abs(self.upper_coords[2]-self.upper_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
             self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
@@ -268,7 +278,7 @@ class BaseBodyGUI(Frame):
             self.lower_canvas.delete(self.lower_line)
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
             self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
-            self.timer = self.after(ms_to_wait,self.__reset)
+            self.timer = self.after(conf.ms_to_wait,self.__reset)
         self.count += 1
 
     '''
