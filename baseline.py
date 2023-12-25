@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter.ttk import *
 from random import *
 import math
-import timer
+
 from config import conf
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
