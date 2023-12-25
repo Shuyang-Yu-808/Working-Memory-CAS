@@ -1,4 +1,5 @@
 from collections import namedtuple
+from config import conf
 Experiment = namedtuple("Experiment",['name','N_sets'])
 
 E1 = Experiment("1_normal",45)
@@ -44,7 +45,7 @@ class Subject:
                 raise AgeError
 
     def is_complete(self):
-        if len(self.baseline_error) == 10 and len(self.maintask_error) == 10:
+        if len(self.baseline_error) == 10 and len(self.maintask_error) == conf.n_test_set_single_line:
             return True
         return False
 

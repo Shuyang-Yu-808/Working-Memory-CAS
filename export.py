@@ -4,7 +4,12 @@ from config import conf
 from numpy import NaN
 import logging
 import datetime
-import locale; 
+import locale;
+import os.path
+
+
+file_exists = os.path.isfile(conf.csv_filename)
+
 if locale.getpreferredencoding().upper() != 'UTF-8': 
     locale.setlocale(locale.LC_ALL, 'zh_CN.UTF-8') 
 '''
@@ -15,9 +20,9 @@ This is a helper function that stores the experiment data
 
 def export_to_csv(subject,filename):
     fields = ['名', '姓', '年龄', '性别']
-    for i in range(10):
+    for i in range(1,11):
         fields.append('基线任务'+str(i))
-    for i in range(conf.n_test_set_single_line):
+    for i in range(1,conf.n_test_set_single_line+1):
         fields.append('正式任务'+str(i))
     row = []    
     row.append(subject.firstname)
@@ -26,11 +31,14 @@ def export_to_csv(subject,filename):
     row.append(subject.gender)
     row.extend(subject.baseline_error+[NaN]*(10-len(subject.baseline_error)))
     row.extend(subject.maintask_error+[NaN]*(conf.n_test_set_single_line-len(subject.maintask_error)))
+    datadict = dict(zip(fields,row))
 
-    with open(filename, 'w') as csvfile:  
-        csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(fields)
-        csvwriter.writerow(row)
+    with open(filename, 'a') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames = fields)
+        if not file_exists:
+            writer.writeheader()  
+        writer.writerow(datadict)
+
 
 def export_to_log(subject):
     row = []
