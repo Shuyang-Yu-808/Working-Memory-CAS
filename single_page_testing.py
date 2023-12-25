@@ -2,21 +2,23 @@ from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from subject import Subject,IntervieweeNameError,GenderError,AgeError
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from main_task import mainTask as Single #the frame for testing
+=======
+from main_task import MainTaskGUI as Single #the frame for testing
+>>>>>>> Stashed changes
 import tkinter as tk
 from tkinter import ttk
 '''
 This is a helper function that runs on a single frame
 This function should be used for debugging purposes only
 '''
-=======
-from base_opening import base_intro
-from base_instruction import base_instruct
+# from base_opening import base_intro
+# from base_instruction import base_instruct
 from base_body import BaseBodyGUI as Single #the frame for testing
 import tkinter as tk
 from tkinter import ttk
 
->>>>>>> Stashed changes
 class tkinterApp(tk.Tk):
     def __init__(self, *args, **kwargs): 
         # __init__ function for class Tk
