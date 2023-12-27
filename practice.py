@@ -5,6 +5,7 @@ import math
 from config import *
 import time
 from PIL import Image, ImageTk
+from config import conf
 
 # Scale of user operable are
 # Radisu = screen height/4*SCALE
@@ -44,12 +45,12 @@ class Practice(Frame):
 语的意思。单击鼠标右键继续。''',
                       font=("Arial", 25),
                       anchor="center")
-        label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
         return label
     
     def __start_task_button(self,parent):   
         btn = Button(parent, text="继续", takefocus=False, command = lambda : self.__set_up_task())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
 
 
@@ -72,7 +73,7 @@ class Practice(Frame):
         test = ImageTk.PhotoImage(image1)
         label1 = Label(image=test)
         label1.image = test
-        label1.place(relx=instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=instruction_rely-(image1.size[1]/2)/self.canvas_h)
+        label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
         self.after(500)
         label1.destroy()
         self.canvas = self.__full_screen_canvas(self)
@@ -111,7 +112,7 @@ class Practice(Frame):
 
     def __task_continue_button(self,parent):
         btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn.place(relx=next_button_relx, rely=next_button_rely, relwidth=next_button_relwidth, relheight=next_button_relheight)
+        btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
     
     
@@ -184,8 +185,11 @@ class Practice(Frame):
     def __reset(self):
         if not self._is_good_result():
             if self.count > 9:
-                print("you did shit. Exit pls")
-                # self.controller.show_frame("TestIntroGUI")
+                self.canvas.delete("all")
+                self.canvas.destroy()
+                self.label_intro = self._label_bad_ending(self)
+                self.button.destroy()
+                self.button = self._button_bad_exit(self)
             else:
                 self.canvas.delete("all")
                 self.canvas.destroy()
@@ -202,9 +206,20 @@ class Practice(Frame):
         label = Label(parent,text='''角度不相符，请按“继续”按钮再次尝试''',
             font=("Arial", 25),
             anchor="center")
-        label.place(relx=instruction_relx, rely=instruction_rely, relwidth=instruction_relwidth, relheight=instruction_relheight,anchor = CENTER)
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
         return label
     
+    
+    def _label_bad_ending(self,parent):
+        label = Label(parent,text='''很抱歉，由于错误次数过多，无法继续实验。请按“继续”按钮退出。''',
+        font=("Arial", 25),
+        anchor="center")
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
+        return label
 
-    def write_result_to_file(self,datafile):
-        pass
+
+    def _button_bad_exit(self,parent):
+        # btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn = Button(parent, text="继续", takefocus=False)
+        btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
+        return btn
