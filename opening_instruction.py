@@ -20,8 +20,8 @@ class IntroGUI(Frame):
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,
                     anchor=CENTER,
-                    relwidth=conf.instruction_relwidth,
-                    relheight=conf.instruction_relheight)
+                    relwidth=conf.instruction_relwidth+1,
+                    relheight=conf.instruction_relheight+1)
         return label
     
     def __button(self,parent):
