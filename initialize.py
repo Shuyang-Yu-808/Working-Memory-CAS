@@ -1,10 +1,11 @@
 from tkinter import *
+import tkinter as tk
 from tkinter.ttk import *
 from subject import Subject,IntervieweeNameError,GenderError,AgeError
 from config import conf
 class StartPageGUI(Frame):
     def __init__(self,parent,controller):
-        Frame.__init__(self,parent)
+        tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
         self.label_last = self.__label_last(self)
         self.input_last = self.__input_last(self)
@@ -17,7 +18,7 @@ class StartPageGUI(Frame):
         self.button = self.__button(self)
 
     def __label_last(self,parent):
-        label = Label(parent,text="姓：",anchor="center", )
+        label = tk.Label(parent,text="姓：",anchor="center",fg = conf.text_color,bg = conf.canvas_color)
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-120, width=60, height=40)
         return label
     
@@ -27,7 +28,7 @@ class StartPageGUI(Frame):
         return ipt
     
     def __label_first(self,parent):
-        label = Label(parent,text="名：",anchor="center", )
+        label = tk.Label(parent,text="名：",anchor="center", fg = conf.text_color,bg = conf.canvas_color)
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-40, width=60, height=40)
         return label
     
@@ -37,18 +38,18 @@ class StartPageGUI(Frame):
         return ipt
     
     def __label_gender(self,parent):
-        label = Label(parent,text="性别：",anchor="center", )
+        label = tk.Label(parent,text="性别：",anchor="center", fg = conf.text_color,bg = conf.canvas_color)
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+40, width=60, height=40)
         return label
     
     def __select_gender(self,parent):
-        cb = Combobox(parent, state="readonly")
+        cb = Combobox(parent, state="readonly",)
         cb['values'] = ("","男","女")
         cb.place(x=self.winfo_screenwidth()/2, y=self.winfo_screenheight()/2+40, width=80, height=40)
         return cb
     
     def __label_age(self,parent):
-        label = Label(parent,text="年龄：",anchor="center", )
+        label = tk.Label(parent,text="年龄：",anchor="center",fg = conf.text_color,bg = conf.canvas_color)
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2+120, width=60, height=40)
         return label
     
@@ -58,12 +59,12 @@ class StartPageGUI(Frame):
         return ipt
     
     def __label_error(self,parent,text):
-        label = Label(parent,text=text,anchor="center",justify="center")
+        label = tk.Label(parent,text=text,anchor="center",justify="center",fg = conf.text_color,bg = conf.canvas_color)
         label.place(x=self.winfo_screenwidth()/2-100, y=self.winfo_screenheight()/2-220, width=200, height=40)
         return label
     
     def __button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command=lambda: self.__validation())
+        btn = tk.Button(parent, text="继续", takefocus=False,command=lambda: self.__validation(),fg = conf.text_color,bg = conf.canvas_color)
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
                   relwidth=conf.next_button_relwidth,
