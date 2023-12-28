@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 from tkinter.ttk import *
 from random import *
 import math
@@ -16,7 +16,7 @@ MINIMUM_X_DIFF = 3
 
 class PracticeGUI(Frame):
     def __init__(self,parent,controller):
-        Frame.__init__(self,parent)
+        tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
         # Frame.config(self,bg="white")
         # self.bg = "white"
@@ -37,15 +37,15 @@ class PracticeGUI(Frame):
         
 
     def __label_intro(self,parent):
-        label = Label(parent,text='''你做得很好！下面，我们来做一个实验练练手，检测一下你是否完全理解了指导
+        label = tk.Label(parent,text='''你做得很好！下面，我们来做一个实验练练手，检测一下你是否完全理解了指导
 语的意思。单击鼠标右键继续。''',
                       font=("Arial", 25),
-                      anchor="center")
-        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
+                      anchor="center",fg = conf.label_text_color,bg = conf.canvas_color)
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
         return label
     
     def __start_task_button(self,parent):   
-        btn = Button(parent, text="继续", takefocus=False, command = lambda : self.__set_up_task())
+        btn = tk.Button(parent, text="继续", fg = conf.button_text_color,bg = conf.button_bg_color, takefocus=False, command = lambda : self.__set_up_task())
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
 
@@ -101,9 +101,9 @@ class PracticeGUI(Frame):
         # self.timer = self.after(ms_to_wait,self.__reset)
 
     def __full_screen_canvas(self,parent):
-        cvs = Canvas(parent,
+        cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight())
+                     height=self.winfo_screenheight(),bg=conf.canvas_color)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()/2,
                   anchor="center")
@@ -111,7 +111,8 @@ class PracticeGUI(Frame):
 
 
     def __task_continue_button(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn = tk.Button(parent, text="继续", takefocus=False,command= lambda: self.__reset(),
+                        fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
     
@@ -139,6 +140,7 @@ class PracticeGUI(Frame):
         point2_x = center_x-radius
         point2_y = center_y        
         return (point1_x,point1_y,point2_x,point2_y)
+
 
     def __rotate_line(self,parent,x,y):
         if abs(x - self.center_x) <= MINIMUM_X_DIFF:
@@ -202,23 +204,25 @@ class PracticeGUI(Frame):
 
 
     def _try_again_label(self,parent):
-        label = Label(parent,text='''角度不相符，请按“继续”按钮再次尝试''',
+        label = tk.Label(parent,text='''角度不相符，请按“继续”按钮再次尝试''',
             font=("Arial", 25),
-            anchor="center")
-        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
+            anchor="center",
+            fg = conf.label_text_color,bg = conf.canvas_color)
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
         return label
     
     
     def _label_bad_ending(self,parent):
-        label = Label(parent,text='''很抱歉，由于错误次数过多，无法继续实验。请按“继续”按钮退出。''',
+        label = tk.Label(parent,text='''很抱歉，由于错误次数过多，无法继续实验。请按“继续”按钮退出。''',
         font=("Arial", 25),
-        anchor="center")
-        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = CENTER)
+        anchor="center",
+        fg = conf.label_text_color,bg = conf.canvas_color)
+        label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
         return label
 
 
     def _button_bad_exit(self,parent):
-        # btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn = Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit())
+        btn = Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit(),
+                    fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn

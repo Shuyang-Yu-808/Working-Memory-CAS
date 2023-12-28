@@ -23,5 +23,7 @@ class Config():
             self.minimum_x_diff=int(conf['Experiment']['minimum_x_diff'])
             self.csv_filename=conf['Data']['csv_filename']
             self.canvas_color = conf['UI']['canvas_color']
-            self.text_color = conf['UI']['text_color']
+            self.label_text_color = conf['UI']['label_text_color']
+            self.button_bg_color = conf['UI']['button_bg_color']
+            self.button_text_color = conf['UI']['button_text_color']
 conf = Config()

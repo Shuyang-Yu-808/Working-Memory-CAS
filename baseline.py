@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 from tkinter.ttk import *
 from random import *
 import math
@@ -6,32 +6,34 @@ import math
 from config import conf
 class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
-        Frame.__init__(self,parent)
+        tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
         self.label_intro = self.__label_first_intro(self)
         self.button = self.__button_change_label(self)
 
 
     def __label_first_intro(self,parent):
-        label = Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
+        label = tk.Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
                       font=("Arial", 25),
-                      anchor="center")
+                      anchor="center",
+                      fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,
-                    anchor=CENTER,
+                    anchor=tk.CENTER,
                     relwidth=conf.instruction_relwidth,
                     relheight=conf.instruction_relheight)
         return label
     
 
     def __label_second_intro(self,parent):
-        label = Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段。
+        label = tk.Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段。
 请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
                       font=("Arial", 25),
-                      anchor="center")
+                      anchor="center",
+                      fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,
-                    anchor=CENTER,
+                    anchor=tk.CENTER,
                     relwidth=conf.instruction_relwidth,
                     relheight=conf.instruction_relheight)
         return label
@@ -40,9 +42,9 @@ class BaseBodyGUI(Frame):
     Canvas on the upper screen
     '''
     def __canvas_upper(self,parent):
-        cvs = Canvas(parent,
+        cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight()/2,bg='#fff')
+                     height=self.winfo_screenheight()/2,bg=conf.canvas_color)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()*(1/4),
                   anchor="center")
@@ -52,30 +54,34 @@ class BaseBodyGUI(Frame):
     Canvas on the lower screen
     '''
     def __canvas_lower(self,parent):
-        cvs = Canvas(parent,
+        cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight()/2,bg='#eee')
+                     height=self.winfo_screenheight()/2,bg=conf.canvas_color)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()*(3/4),
                   anchor="center")
         return cvs
     
+
     '''
     Button that sets up the baseline test
     '''
     def __button_start_task(self,parent):   
-        btn = Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task())
+        btn = tk.Button(parent, text="开始", takefocus=False, command = lambda : self.__set_up_baseline_task(),
+                        fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
                   relwidth=conf.next_button_relwidth,
                   relheight=conf.next_button_relheight)
         return btn
 
+
     '''
     Button that resets the baseline test
     '''
     def __button_repeat_task(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
+        btn = tk.Button(parent, text="继续", takefocus=False,command= lambda: self.__reset(),
+                    fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
                   relwidth=conf.next_button_relwidth,
@@ -86,7 +92,8 @@ class BaseBodyGUI(Frame):
     Button that calls to change label text
     '''
     def __button_change_label(self,parent):
-        btn = Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction())
+        btn = tk.Button(parent, text="继续", takefocus=False,command= lambda : self.__change_instruction(),
+                        fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
                   relwidth=conf.next_button_relwidth,
