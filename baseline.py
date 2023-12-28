@@ -265,7 +265,7 @@ class BaseBodyGUI(Frame):
         
         if self.count >= 10:
             self.__save()
-            self.controller.show_frame("MainTaskGUI")
+            self.controller.show_frame("PracticeGUI")
                     
         elif self.count < 10:
             self.mouse_x = 0

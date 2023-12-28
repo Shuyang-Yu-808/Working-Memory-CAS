@@ -25,9 +25,6 @@ class MainTaskGUI (tk.Frame):
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()
         self.count = 1
-        
-        #store experiment results
-        self.results = []
 
         # Radius of operable circle
         self.radius = self.winfo_screenheight()/4*conf.scale
@@ -39,7 +36,14 @@ class MainTaskGUI (tk.Frame):
         self.canvas_w = self.winfo_screenwidth()
         self.canvas_h = self.winfo_screenheight()
         
-
+    def __exit_button(self,parent):   
+        btn = tk.Button(parent, text="退出", fg = "white", bg = "grey", takefocus=False, command = lambda : self.controller.exit())
+        btn.place(relx=conf.next_button_relx,
+                  rely=conf.next_button_rely,
+                  relwidth=conf.next_button_relwidth,
+                  relheight=conf.next_button_relheight)
+        return btn
+    
     def __label_intro(self,parent):
         label = tk.Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“开始”按钮继续。''',
                       font=("Arial", 25),
@@ -73,7 +77,9 @@ class MainTaskGUI (tk.Frame):
         self.coords = self.__generate_coor_line(self.radius,self.canvas_w,self.canvas_h)
         self.line = self.__draw_line(self,self.coords)
 
-        self.after(500)
+        self.after(500,lambda: self.__show_mask())
+
+    def __show_mask(self):
         self.canvas.delete(self.line)
         self.canvas.destroy()
 
@@ -82,7 +88,9 @@ class MainTaskGUI (tk.Frame):
         label1 = tk.Label(image=test)
         label1.image = test
         label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
-        self.after(500)
+        self.after(500,lambda: self.__show_todo(label1))
+
+    def __show_todo(self,label1):
         label1.destroy()
         self.canvas = self.__full_screen_canvas(self)
         self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
@@ -202,7 +210,7 @@ class MainTaskGUI (tk.Frame):
             self.canvas.destroy()
             self.button.destroy()
             self.label_intro = self._label_ending(self)
-            print(self.results)
+            self.button = self.__exit_button(self)
         elif self.count == conf.n_test_set_single_line//2 + 1:
             self.canvas.delete("all")
             self.canvas.destroy()

@@ -19,25 +19,24 @@ This is a helper function that stores the experiment data
 '''
 
 def export_to_csv(subject,filename):
-    fields = ['名', '姓', '年龄', '性别']
+    fields = ['姓', '名', '年龄', '性别', '测试时间']
     for i in range(1,11):
         fields.append('基线任务'+str(i))
     for i in range(1,conf.n_test_set_single_line+1):
         fields.append('正式任务'+str(i))
-    row = []    
-    row.append(subject.firstname)
+    row = []
     row.append(subject.lastname)
+    row.append(subject.firstname)
     row.append(subject.age)
     row.append(subject.gender)
+    row.append(str(datetime.datetime.now()))
     row.extend(subject.baseline_error+[NaN]*(10-len(subject.baseline_error)))
     row.extend(subject.maintask_error+[NaN]*(conf.n_test_set_single_line-len(subject.maintask_error)))
-    datadict = dict(zip(fields,row))
-
-    with open(filename, 'a') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames = fields)
+    with open(filename, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
         if not file_exists:
-            writer.writeheader()  
-        writer.writerow(datadict)
+            writer.writerow(fields)  
+        writer.writerow(row)
 
 
 def export_to_log(subject):

@@ -14,7 +14,7 @@ SCALE = 0.9
 # Avoids extremely large slope of line
 MINIMUM_X_DIFF = 3
 
-class Practice(Frame):
+class PracticeGUI(Frame):
     def __init__(self,parent,controller):
         Frame.__init__(self,parent)
         self.controller = controller
@@ -34,10 +34,6 @@ class Practice(Frame):
         # Mouse coordinates
         self.mouse_x = 0
         self.mouse_y = 0
-
-        # Size of full-screen canvas
-        self.canvas_w = self.winfo_screenwidth()
-        self.canvas_h = self.winfo_screenheight()
         
 
     def __label_intro(self,parent):
@@ -65,7 +61,9 @@ class Practice(Frame):
         self.coords = self.__generate_coor_line(self.radius,self.canvas_w,self.canvas_h)
         self.line = self.__draw_line(self,self.coords)
 
-        self.after(500)
+        self.after(500,lambda: self.__show_mask())
+
+    def __show_mask(self):
         self.canvas.delete("all")
         self.canvas.destroy()
         self.button.destroy()
@@ -74,7 +72,9 @@ class Practice(Frame):
         label1 = Label(image=test)
         label1.image = test
         label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
-        self.after(500)
+        self.after(500,lambda: self.__show_todo(label1))
+
+    def __show_todo(self,label1):
         label1.destroy()
         self.canvas = self.__full_screen_canvas(self)
         self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
@@ -117,7 +117,7 @@ class Practice(Frame):
     
     
     def __draw_line(self,parent,coords):
-            return self.canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+        return self.canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
 
 
     def __generate_coor_line(self,radius,w,h):
@@ -198,8 +198,7 @@ class Practice(Frame):
                 self.button = self.__start_task_button(self)
             self.count += 1
         else:
-            print("you did well")
-            # self.controller.show_frame("TestIntroGUI")
+            self.controller.show_frame("MainTaskGUI")
 
 
     def _try_again_label(self,parent):
@@ -220,6 +219,6 @@ class Practice(Frame):
 
     def _button_bad_exit(self,parent):
         # btn = Button(parent, text="继续", takefocus=False,command= lambda: self.__reset())
-        btn = Button(parent, text="继续", takefocus=False)
+        btn = Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit())
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn

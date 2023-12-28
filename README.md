@@ -18,7 +18,4 @@
     Avoid handling any data main.py
 
 # TODO:
-    1. Comments
-    2. Drag-to-rotate
-    3. Adaptive interface 
-    4. change canavs background color to darker gray
+    1. color

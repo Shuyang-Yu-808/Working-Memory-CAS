@@ -4,6 +4,7 @@ from initialize import StartPageGUI
 from opening_instruction import IntroGUI
 from baseline import BaseBodyGUI
 from main_task import MainTaskGUI
+from practice import PracticeGUI
 from subject import Subject
 import export
 from config import conf
@@ -23,7 +24,7 @@ class TkinterApp(tk.Tk):
   
         # Initializes an array of frames
         self.frames = {}
-        for F in (StartPageGUI,IntroGUI,BaseBodyGUI,MainTaskGUI):
+        for F in (StartPageGUI,IntroGUI,BaseBodyGUI,PracticeGUI,MainTaskGUI):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame 
