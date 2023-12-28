@@ -222,7 +222,7 @@ class PracticeGUI(Frame):
 
 
     def _button_bad_exit(self,parent):
-        btn = Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit(),
+        btn = tk.Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit(),
                     fg = conf.button_text_color,bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
