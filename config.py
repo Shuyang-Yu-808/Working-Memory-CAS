@@ -20,5 +20,6 @@ class Config():
         self.n_test_set_single_line=int(conf['Experiment']['n_test_set_single_line'])
         self.minimum_x_diff=int(conf['Experiment']['minimum_x_diff'])
         self.csv_filename=conf['Data']['csv_filename']
-
+        self.canvas_color = conf['UI']['canvas_color']
+        self.text_color = conf['UI']['text_color']
 conf = Config()
