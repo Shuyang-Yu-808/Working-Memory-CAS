@@ -37,7 +37,7 @@ class MainTaskGUI (tk.Frame):
         self.canvas_h = self.winfo_screenheight()
         
     def __exit_button(self,parent):   
-        btn = tk.Button(parent, text="退出", fg = "white", bg = "grey", takefocus=False, command = lambda : self.controller.exit())
+        btn = tk.Button(parent, text="退出", fg = conf.button_text_color, bg = conf.button_bg_color, takefocus=False, command = lambda : self.controller.exit())
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
                   relwidth=conf.next_button_relwidth,
@@ -46,7 +46,7 @@ class MainTaskGUI (tk.Frame):
     
     def __label_intro(self,parent):
         label = tk.Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“开始”按钮继续。''',
-                      font=("Arial", 25),
+                      font=conf.label_font,
                       anchor="center",fg = "white",bg = "grey")
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,
@@ -56,8 +56,8 @@ class MainTaskGUI (tk.Frame):
         return label
     
     def __start_task_button(self,parent):   
-        btn = tk.Button(parent, text="开始", fg = "white", bg = "grey", takefocus=False, command = lambda : self.__set_up_task())
-        # btn = macTkButton(parent, text="开始", fg = "white", bg = "grey", takefocus=False, command = lambda : self.__set_up_task())
+        btn = tk.Button(parent, text="开始", fg = conf.button_text_color, bg = conf.button_bg_color, takefocus=False, command = lambda : self.__set_up_task())
+        # btn = macTkButton(parent, text="开始", fg = conf.button_text_color, bg = conf.button_bg_color, takefocus=False, command = lambda : self.__set_up_task())
        
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
@@ -87,6 +87,7 @@ class MainTaskGUI (tk.Frame):
         test = ImageTk.PhotoImage(image1)
         label1 = tk.Label(image=test)
         label1.image = test
+        label1.config(highlightthickness=0)
         label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
         self.after(500,lambda: self.__show_todo(label1))
 
@@ -119,7 +120,7 @@ class MainTaskGUI (tk.Frame):
     def __full_screen_canvas(self,parent):
         cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
-                     height=self.winfo_screenheight(), bg = 'grey')
+                     height=self.winfo_screenheight(), bg=conf.canvas_color)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()/2,
                   anchor="center")
@@ -226,7 +227,7 @@ class MainTaskGUI (tk.Frame):
 
     def _label_take_a_break(self,parent):
         label = tk.Label(parent,text='''目前为止你做得很好！现在闭目或远眺休息眼睛，若感觉状态回复则可点击“开始”按钮继续。''',
-                      font=("Arial", 25),
+                      font=conf.label_font,
                       anchor="center",bg = "grey",fg = "white")
         label.place(relx=conf.instruction_relx,
                             rely=conf.instruction_rely,
@@ -238,7 +239,7 @@ class MainTaskGUI (tk.Frame):
 
     def _label_ending(self,parent):
         label = tk.Label(parent,text='''实验结束！再次感谢你参与本次心理学实验！。''',
-                      font=("Arial", 25),
+                      font=conf.label_font,
                       anchor="center",bg = "grey",fg = "white")
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,

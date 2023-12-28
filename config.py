@@ -26,4 +26,5 @@ class Config():
             self.label_text_color = conf['UI']['label_text_color']
             self.button_bg_color = conf['UI']['button_bg_color']
             self.button_text_color = conf['UI']['button_text_color']
+            self.label_font = (conf['UI']['label_text_font'], int(conf['UI']['label_text_size']))
 conf = Config()

@@ -39,7 +39,7 @@ class PracticeGUI(tk.Frame):
     def __label_intro(self,parent):
         label = tk.Label(parent,text='''你做得很好！下面，我们来做一个实验练练手，检测一下你是否完全理解了指导
 语的意思。单击鼠标右键继续。''',
-                      font=("Arial", 25),
+                      font=conf.label_font,
                       anchor="center",fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
         return label
@@ -70,6 +70,7 @@ class PracticeGUI(tk.Frame):
         image1 = Image.open("visual_masking.png")
         test = ImageTk.PhotoImage(image1)
         label1 = tk.Label(image=test)
+        label1.config(highlightthickness=0)
         label1.image = test
         label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
         self.after(500,lambda: self.__show_todo(label1))
@@ -205,7 +206,7 @@ class PracticeGUI(tk.Frame):
 
     def _try_again_label(self,parent):
         label = tk.Label(parent,text='''角度不相符，请按“继续”按钮再次尝试''',
-            font=("Arial", 25),
+            font=conf.label_font,
             anchor="center",
             fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
@@ -214,7 +215,7 @@ class PracticeGUI(tk.Frame):
     
     def _label_bad_ending(self,parent):
         label = tk.Label(parent,text='''很抱歉，由于错误次数过多，无法继续实验。请按“继续”按钮退出。''',
-        font=("Arial", 25),
+        font=conf.label_font,
         anchor="center",
         fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx, rely=conf.instruction_rely, relwidth=conf.instruction_relwidth, relheight=conf.instruction_relheight,anchor = tk.CENTER)
@@ -222,16 +223,9 @@ class PracticeGUI(tk.Frame):
 
 
     def _button_bad_exit(self,parent):
-<<<<<<< HEAD
         btn = tk.Button(parent, 
                      text="退出", 
                      takefocus=False, 
                      command=lambda: self.controller.exit(),
                      fg = conf.button_text_color,
                      bg = conf.button_bg_color)
-=======
-        btn = tk.Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit(),
-                    fg = conf.button_text_color,bg = conf.button_bg_color)
->>>>>>> 5ba9077f41180f8b49c79f640d5deaec2a014376
-        btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
-        return btn
