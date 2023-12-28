@@ -13,13 +13,8 @@ from config import conf
 
 class MainTaskGUI (tk.Frame):
     def __init__(self,parent,controller):
-        tk.Frame.__init__(self,parent,bg = "grey")
+        tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
-        # Frame.config(self,bg="white")
-        # self.bg = "white"
-        # Baseline task repetition counter
-        # self.config()
-        # self.configure(bg = "grey")
         self.label_intro = self.__label_intro(self)
         self.button = self.__start_task_button(self)
         self.canvas_w = self.winfo_screenwidth()
@@ -47,7 +42,7 @@ class MainTaskGUI (tk.Frame):
     def __label_intro(self,parent):
         label = tk.Label(parent,text='''目前为止你做得都很好！下面我们正式进入实验，加油！点击“开始”按钮继续。''',
                       font=conf.label_font,
-                      anchor="center",fg = "white",bg = "grey")
+                      anchor="center",fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx,
                     rely=conf.instruction_rely,
                     anchor=tk.CENTER,
@@ -82,7 +77,7 @@ class MainTaskGUI (tk.Frame):
     def __show_mask(self):
         self.canvas.delete(self.line)
         self.canvas.destroy()
-
+        self.canvas = self.__full_screen_canvas(self)
         image1 = Image.open("visual_masking.png")
         test = ImageTk.PhotoImage(image1)
         label1 = tk.Label(image=test)
@@ -93,7 +88,6 @@ class MainTaskGUI (tk.Frame):
 
     def __show_todo(self,label1):
         label1.destroy()
-        self.canvas = self.__full_screen_canvas(self)
         self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
         self.todo_line = self.__draw_line(self,self.todo_coords)
 
@@ -128,7 +122,7 @@ class MainTaskGUI (tk.Frame):
 
 
     def __task_continue_button(self,parent):
-        btn = tk.Button(parent, text="继续",bg = "grey", fg = "white", takefocus=False,command= lambda: self.__reset())
+        btn = tk.Button(parent, text="继续",fg = conf.button_text_color,bg = conf.button_bg_color, takefocus=False,command= lambda: self.__reset())
         # btn = macTkButton(parent, text="继续",bg = "grey", fg = "white",takefocus=False,command= lambda: self.__reset())
         btn.place(relx=conf.next_button_relx,
                   rely=conf.next_button_rely,
