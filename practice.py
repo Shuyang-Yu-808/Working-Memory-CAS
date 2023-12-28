@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter.ttk import *
+import tkinter.ttk as ttk
 from random import *
 import math
 from config import *
@@ -14,7 +14,7 @@ SCALE = 0.9
 # Avoids extremely large slope of line
 MINIMUM_X_DIFF = 3
 
-class PracticeGUI(Frame):
+class PracticeGUI(tk.Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
@@ -69,7 +69,7 @@ class PracticeGUI(Frame):
         self.button.destroy()
         image1 = Image.open("visual_masking.png")
         test = ImageTk.PhotoImage(image1)
-        label1 = Label(image=test)
+        label1 = tk.Label(image=test)
         label1.image = test
         label1.place(relx=conf.instruction_relx-(image1.size[0]/2)/self.canvas_w, rely=conf.instruction_rely-(image1.size[1]/2)/self.canvas_h)
         self.after(500,lambda: self.__show_todo(label1))
@@ -222,7 +222,11 @@ class PracticeGUI(Frame):
 
 
     def _button_bad_exit(self,parent):
-        btn = Button(parent, text="退出", takefocus=False, command=lambda: self.controller.exit(),
-                    fg = conf.button_text_color,bg = conf.button_bg_color)
+        btn = tk.Button(parent, 
+                     text="退出", 
+                     takefocus=False, 
+                     command=lambda: self.controller.exit(),
+                     fg = conf.button_text_color,
+                     bg = conf.button_bg_color)
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn

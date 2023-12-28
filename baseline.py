@@ -14,7 +14,7 @@ class BaseBodyGUI(Frame):
 
     def __label_first_intro(self,parent):
         label = tk.Label(parent,text='''接下来，请你完成一些小任务，帮助你更好地完成后续的正式实验。请点击“继续”按钮。''',
-                      font=("Arial", 25),
+                      font=("黑体", 25),
                       anchor="center",
                       fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx,
@@ -28,7 +28,7 @@ class BaseBodyGUI(Frame):
     def __label_second_intro(self,parent):
         label = tk.Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段。
 请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
-                      font=("Arial", 25),
+                      font=("黑体", 25),
                       anchor="center",
                       fg = conf.label_text_color,bg = conf.canvas_color)
         label.place(relx=conf.instruction_relx,
@@ -45,6 +45,7 @@ class BaseBodyGUI(Frame):
         cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
                      height=self.winfo_screenheight()/2,bg=conf.canvas_color)
+        cvs.config(highlightthickness=0)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()*(1/4),
                   anchor="center")
@@ -57,6 +58,7 @@ class BaseBodyGUI(Frame):
         cvs = tk.Canvas(parent,
                      width=self.winfo_screenwidth(),
                      height=self.winfo_screenheight()/2,bg=conf.canvas_color)
+        cvs.config(highlightthickness=0)
         cvs.place(x=self.winfo_screenwidth()/2,
                   y=self.winfo_screenheight()*(3/4),
                   anchor="center")
