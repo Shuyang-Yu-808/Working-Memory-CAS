@@ -19,3 +19,11 @@
 
 # TODO:
     1. color
+
+
+Dependencies:
+    1. pillow 
+        pip intall pillow
+    2. Python3.9+
+    3. numpy
+        pip install numpy

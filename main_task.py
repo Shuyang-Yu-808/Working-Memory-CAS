@@ -6,7 +6,7 @@ from random import *
 import math
 import time
 from PIL import Image, ImageTk
-from tkmacosx import Button as macTkButton
+# from tkmacosx import Button as macTkButton
 from config import conf
 
 
