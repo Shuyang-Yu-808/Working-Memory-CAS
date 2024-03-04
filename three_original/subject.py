@@ -1,4 +1,6 @@
 from collections import namedtuple
+import sys
+sys.path.append("..")
 from config import conf
 Experiment = namedtuple("Experiment",['name','N_sets'])
 
