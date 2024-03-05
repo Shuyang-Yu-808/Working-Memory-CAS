@@ -5,7 +5,7 @@ class Config():
         conf = configparser.ConfigParser()
         curpath = os.path.dirname(os.path.realpath(__file__))
         path = os.path.join(curpath,'config.ini')
-        with open('../config.ini', 'r', encoding='utf-8') as f:
+        with open('config.ini', 'r', encoding='utf-8') as f:
             conf.read_file(f)
             conf.read(path,encoding="utf-8")
             self.next_button_relx=float(conf['UI']['next_button_relx'])
