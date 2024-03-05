@@ -7,8 +7,6 @@ from main_task import MainTaskGUI
 from practice import PracticeGUI
 from subject import Subject
 import export
-import sys
-sys.path.append("..")
 from config import conf
 
 class TkinterApp(tk.Tk):

@@ -8,6 +8,8 @@ class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
+        self.target_index = -1
+        self.target_color = ""
         self.label_intro = self.__label_first_intro(self)
         self.button = self.__button_change_label(self)
 
@@ -26,8 +28,8 @@ class BaseBodyGUI(Frame):
     
 
     def __label_second_intro(self,parent):
-        label = tk.Label(parent,text='''接下来，屏幕上半部分中央会显示某个朝向的线段。
-请你用鼠标调整下方的线段直至和上方的一样，按“继续”按钮继续，这个过程会重复10次。''',
+        label = tk.Label(parent,text='''接下来，屏幕上半部分中央会显示三个不同颜色、随机朝向的线段。
+请你用鼠标调整下方的线段直至和上方对应的颜色的一样，按“继续”按钮继续，这个过程会重复10次。''',
                       font=conf.label_font,
                       anchor="center",
                       fg = conf.label_text_color,bg = conf.canvas_color)
@@ -114,7 +116,7 @@ class BaseBodyGUI(Frame):
         self.count = 1
         # Radius of operable circle
         self.radius = self.winfo_screenheight()/4*conf.scale
-
+        self.upper_lines_radius = self.winfo_screenheight()/4*conf.scale/2
         # Mouse coordinates
         self.mouse_x = 0
         self.mouse_y = 0
@@ -128,12 +130,23 @@ class BaseBodyGUI(Frame):
         self.lower_canvas = self.__canvas_lower(self)
         
         # Reference line on upper canvas format(x1,y1,x2,y2)
-        self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
-        self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
+        self.upper_coords = self.__generate_coor_upper_lines(self.upper_lines_radius,self.canvas_w,self.canvas_h)
+        random_list = sample(range(0, 5), 3)
+        color_list = {}
+        color_list['alpha'] = conf.color_list[random_list[0]]
+        color_list['beta'] = conf.color_list[random_list[1]]
+        color_list['gamma'] = conf.color_list[random_list[2]]
+        self.upper_line1 = self.__draw_line(self,self.upper_coords[:4],'upper',color_list['alpha'])
+        self.upper_line2 = self.__draw_line(self,self.upper_coords[4:8],'upper',color_list['beta'])
+        self.upper_line3 = self.__draw_line(self,self.upper_coords[8:],'upper',color_list['gamma'])
+
 
         # Operable line on lower canvas
         self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-        self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+        self.target_index = randint(0,2)
+        self.target_color = color_list[['alpha','beta','gamma'][self.target_index]]
+
+        self.lower_line = self.__draw_line(self,self.lower_coords,'lower',self.target_color)
 
         # Center coordinates of lower canvas (not screen coordinates)
         self.lower_center_x = self.canvas_w/2
@@ -161,30 +174,48 @@ class BaseBodyGUI(Frame):
     2. widget it's in (canvas)
     3. coordinates (absolute coordinates within a canvas)
     '''
-    def __draw_line(self,parent,coords,canvas):
+    def __draw_line(self,parent,coords,canvas,color="black"):
         if canvas == "upper":
-            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5,fill=color)
         elif canvas == 'lower':
-            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5,fill=color)
         
     '''
     Creates the coordinates of a random line on the upper canvas
     The line goes through the center of the upper canvas
     '''
-    def __generate_coor_upper_line(self,radius,w,h):
+    def __generate_coor_upper_lines(self,radius,w,h):
         # random radian number
-        theta = math.radians(randint(0,359))
+        theta1 = math.radians(randint(0,359))
+        theta2 = math.radians(randint(0,359))
+        theta3 = math.radians(randint(0,359))
 
         # center of the upper canvas
-        center_x = w/2
-        center_y = h/2
-
+        
+        line1_center_x = w/5*1.5
+        line2_center_x = w/5*2.5
+        line3_center_x = w/5*3.5
+        lines_center_y = h/2
         # diagonal coordiantes that specifies an oval
-        point1_x = center_x+math.cos(theta)*radius
-        point1_y = center_y+math.sin(theta)*radius
-        point2_x = center_x-math.cos(theta)*radius
-        point2_y = center_y-math.sin(theta)*radius        
-        return (point1_x,point1_y,point2_x,point2_y)
+        line1_point1_x = line1_center_x+math.cos(theta1)*radius
+        line1_point1_y = lines_center_y+math.sin(theta1)*radius
+        line1_point2_x = line1_center_x-math.cos(theta1)*radius
+        line1_point2_y = lines_center_y-math.sin(theta1)*radius        
+
+
+        line2_point1_x = line2_center_x+math.cos(theta2)*radius
+        line2_point1_y = lines_center_y+math.sin(theta2)*radius
+        line2_point2_x = line2_center_x-math.cos(theta2)*radius
+        line2_point2_y = lines_center_y-math.sin(theta2)*radius
+
+        line3_point1_x = line3_center_x+math.cos(theta3)*radius
+        line3_point1_y = lines_center_y+math.sin(theta3)*radius
+        line3_point2_x = line3_center_x-math.cos(theta3)*radius
+        line3_point2_y = lines_center_y-math.sin(theta3)*radius                
+        return (line1_point1_x,line1_point1_y,line1_point2_x,line1_point2_y,
+                line2_point1_x,line2_point1_y,line2_point2_x,line2_point2_y,
+                line3_point1_x,line3_point1_y,line3_point2_x,line3_point2_y)
+    
     
     '''
     Creates the coordinates of a horizontal line on the lower canvas
@@ -234,7 +265,7 @@ class BaseBodyGUI(Frame):
             new_p2_y = self.lower_center_y-y_offset
             self.lower_line_slope = (self.lower_center_y-y)/(x-self.lower_center_x)
         self.lower_canvas.delete(self.lower_line)
-        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
+        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower",self.target_color)    
     
     '''
     Detects mouse drag events inside the operable circle on the lower canvas
@@ -267,11 +298,12 @@ class BaseBodyGUI(Frame):
     '''
     def __reset(self): 
         self.after_cancel(self.timer)
-        if abs(self.upper_coords[2]-self.upper_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
+        self.target_coords = self.upper_coords[self.target_index*4:self.target_index*4+4]
+        if abs(self.target_coords[2]-self.target_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
-            self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
-        
+            self._update_base_result((self.target_coords[1]-self.target_coords[3])/(self.target_coords[2]-self.target_coords[0]),self.lower_line_slope)
+
         if self.count >= 10:
             self.__save()
             self.controller.show_frame("PracticeGUI")

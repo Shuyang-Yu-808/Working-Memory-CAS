@@ -5,7 +5,7 @@ class Config():
         conf = configparser.ConfigParser()
         curpath = os.path.dirname(os.path.realpath(__file__))
         path = os.path.join(curpath,'config.ini')
-        with open('../config.ini', 'r', encoding='utf-8') as f:
+        with open('config.ini', 'r', encoding='utf-8') as f:
             conf.read_file(f)
             conf.read(path,encoding="utf-8")
             self.next_button_relx=float(conf['UI']['next_button_relx'])
@@ -27,4 +27,5 @@ class Config():
             self.button_bg_color = conf['UI']['button_bg_color']
             self.button_text_color = conf['UI']['button_text_color']
             self.label_font = (conf['UI']['label_text_font'], int(conf['UI']['label_text_size']))
+            self.color_list = conf['UI']['color_list'].split(",")
 conf = Config()
