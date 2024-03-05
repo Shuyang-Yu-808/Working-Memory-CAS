@@ -8,6 +8,8 @@ class BaseBodyGUI(Frame):
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent,bg = conf.canvas_color)
         self.controller = controller
+        self.target_index = -1
+        self.target_color = ""
         self.label_intro = self.__label_first_intro(self)
         self.button = self.__button_change_label(self)
 
@@ -141,7 +143,10 @@ class BaseBodyGUI(Frame):
 
         # Operable line on lower canvas
         self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-        self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+        self.target_index = randint(0,2)
+        self.target_color = color_list[['alpha','beta','gamma'][self.target_index]]
+
+        self.lower_line = self.__draw_line(self,self.lower_coords,'lower',self.target_color)
 
         # Center coordinates of lower canvas (not screen coordinates)
         self.lower_center_x = self.canvas_w/2
@@ -260,7 +265,7 @@ class BaseBodyGUI(Frame):
             new_p2_y = self.lower_center_y-y_offset
             self.lower_line_slope = (self.lower_center_y-y)/(x-self.lower_center_x)
         self.lower_canvas.delete(self.lower_line)
-        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower")    
+        self.lower_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],"lower",self.target_color)    
     
     '''
     Detects mouse drag events inside the operable circle on the lower canvas
@@ -293,11 +298,12 @@ class BaseBodyGUI(Frame):
     '''
     def __reset(self): 
         self.after_cancel(self.timer)
-        if abs(self.upper_coords[2]-self.upper_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
+        self.target_coords = self.upper_coords[self.target_index*4:self.target_index*4+4]
+        if abs(self.target_coords[2]-self.target_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
-            self._update_base_result((self.upper_coords[1]-self.upper_coords[3])/(self.upper_coords[2]-self.upper_coords[0]),self.lower_line_slope)
-        
+            self._update_base_result((self.target_coords[1]-self.target_coords[3])/(self.target_coords[2]-self.target_coords[0]),self.lower_line_slope)
+
         if self.count >= 10:
             self.__save()
             self.controller.show_frame("PracticeGUI")
