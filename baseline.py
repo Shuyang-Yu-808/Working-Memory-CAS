@@ -129,9 +129,14 @@ class BaseBodyGUI(Frame):
         
         # Reference line on upper canvas format(x1,y1,x2,y2)
         self.upper_coords = self.__generate_coor_upper_lines(self.upper_lines_radius,self.canvas_w,self.canvas_h)
-        self.upper_line1 = self.__draw_line(self,self.upper_coords[:4],'upper')
-        self.upper_line2 = self.__draw_line(self,self.upper_coords[4:8],'upper')
-        self.upper_line3 = self.__draw_line(self,self.upper_coords[8:],'upper')
+        random_list = sample(range(0, 5), 3)
+        color_list = {}
+        color_list['alpha'] = conf.color_list[random_list[0]]
+        color_list['beta'] = conf.color_list[random_list[1]]
+        color_list['gamma'] = conf.color_list[random_list[2]]
+        self.upper_line1 = self.__draw_line(self,self.upper_coords[:4],'upper',color_list['alpha'])
+        self.upper_line2 = self.__draw_line(self,self.upper_coords[4:8],'upper',color_list['beta'])
+        self.upper_line3 = self.__draw_line(self,self.upper_coords[8:],'upper',color_list['gamma'])
 
 
         # Operable line on lower canvas
@@ -164,11 +169,11 @@ class BaseBodyGUI(Frame):
     2. widget it's in (canvas)
     3. coordinates (absolute coordinates within a canvas)
     '''
-    def __draw_line(self,parent,coords,canvas):
+    def __draw_line(self,parent,coords,canvas,color="black"):
         if canvas == "upper":
-            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+            return self.upper_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5,fill=color)
         elif canvas == 'lower':
-            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+            return self.lower_canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5,fill=color)
         
     '''
     Creates the coordinates of a random line on the upper canvas
