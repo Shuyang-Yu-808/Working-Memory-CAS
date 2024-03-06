@@ -303,6 +303,7 @@ class BaseBodyGUI(Frame):
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
             self._update_base_result((self.target_coords[1]-self.target_coords[3])/(self.target_coords[2]-self.target_coords[0]),self.lower_line_slope)
+        print(self.base_result)
 
         if self.count >= 10:
             self.__save()
@@ -312,13 +313,28 @@ class BaseBodyGUI(Frame):
             self.mouse_x = 0
             self.mouse_y = 0
 
-            self.upper_canvas.delete(self.upper_line)
-            self.upper_coords = self.__generate_coor_upper_line(self.radius,self.canvas_w,self.canvas_h)
-            self.upper_line = self.__draw_line(self,self.upper_coords,'upper')
-
+            self.upper_canvas.delete(self.upper_line1)
+            self.upper_canvas.delete(self.upper_line2)
+            self.upper_canvas.delete(self.upper_line3)
             self.lower_canvas.delete(self.lower_line)
+
+            self.upper_coords = self.__generate_coor_upper_lines(self.upper_lines_radius,self.canvas_w,self.canvas_h)
+            random_list = sample(range(0, 5), 3)
+            color_list = {}
+            color_list['alpha'] = conf.color_list[random_list[0]]
+            color_list['beta'] = conf.color_list[random_list[1]]
+            color_list['gamma'] = conf.color_list[random_list[2]]
+            self.upper_line1 = self.__draw_line(self,self.upper_coords[:4],'upper',color_list['alpha'])
+            self.upper_line2 = self.__draw_line(self,self.upper_coords[4:8],'upper',color_list['beta'])
+            self.upper_line3 = self.__draw_line(self,self.upper_coords[8:],'upper',color_list['gamma'])
+
+            # Operable line on lower canvas
             self.lower_coords = self.__generate_coor_lower_line(self.radius,self.canvas_w,self.canvas_h)
-            self.lower_line = self.__draw_line(self,self.lower_coords,'lower')
+            self.target_index = randint(0,2)
+            self.target_color = color_list[['alpha','beta','gamma'][self.target_index]]
+
+            self.lower_line = self.__draw_line(self,self.lower_coords,'lower',self.target_color)
+            self.lower_line_slope = 0
             self.timer = self.after(conf.ms_to_wait,self.__reset)
         self.count += 1
 
