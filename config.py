@@ -20,6 +20,8 @@ class Config():
             self.scale=float(conf['UI']['scale'])
             self.ms_to_wait=int(conf['Experiment']['ms_to_wait'])
             self.n_test_set_single_line=int(conf['Experiment']['n_test_set_single_line'])
+            self.n_test_set_three_line=int(conf['Experiment']['n_test_set_three_line'])
+
             self.minimum_x_diff=int(conf['Experiment']['minimum_x_diff'])
             self.csv_filename=conf['Data']['csv_filename']
             self.canvas_color = conf['UI']['canvas_color']

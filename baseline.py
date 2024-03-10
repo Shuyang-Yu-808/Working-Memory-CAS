@@ -303,7 +303,7 @@ class BaseBodyGUI(Frame):
             self._update_base_result(float('inf'),self.lower_line_slope)
         else:
             self._update_base_result((self.target_coords[1]-self.target_coords[3])/(self.target_coords[2]-self.target_coords[0]),self.lower_line_slope)
-        print(self.base_result)
+        # print(self.base_result)
 
         if self.count >= 10:
             self.__save()
