@@ -28,9 +28,15 @@ class PracticeGUI(tk.Frame):
         self.canvas_h = self.winfo_screenheight()
         self.count = 1
 
+        self.target_index = -1
+        self.target_color = ""
 
         # Radius of operable circle
-        self.radius = self.winfo_screenheight()/4*SCALE
+        self.radius = self.winfo_screenheight()/4*conf.scale
+        
+        # Radius of reference lines
+        self.ref_line_radius = self.winfo_screenheight()/4*conf.scale/2
+
         # Mouse coordinates
         self.mouse_x = 0
         self.mouse_y = 0
@@ -58,8 +64,15 @@ class PracticeGUI(tk.Frame):
         self.canvas = self.__full_screen_canvas(self)
         
         # Reference line on canvas format(x1,y1,x2,y2)
-        self.coords = self.__generate_coor_line(self.radius,self.canvas_w,self.canvas_h)
-        self.line = self.__draw_line(self,self.coords)
+        self.ref_line_coords = self.__generate_coor_ref_lines(self.ref_line_radius,self.canvas_w,self.canvas_h)
+        random_list = sample(range(0, 5), 3)
+        self.color_list = {}
+        self.color_list['alpha'] = conf.color_list[random_list[0]]
+        self.color_list['beta'] = conf.color_list[random_list[1]]
+        self.color_list['gamma'] = conf.color_list[random_list[2]]
+        self.ref_line1 = self.__draw_line(self,self.ref_line_coords[:4],self.color_list['alpha'])
+        self.ref_line2 = self.__draw_line(self,self.ref_line_coords[4:8],self.color_list['beta'])
+        self.ref_line3 = self.__draw_line(self,self.ref_line_coords[8:],self.color_list['gamma'])
 
         self.after(500,lambda: self.__show_mask())
 
@@ -79,8 +92,10 @@ class PracticeGUI(tk.Frame):
         label1.destroy()
         self.canvas = self.__full_screen_canvas(self)
         self.todo_coords = self.__generate_todo_coor_line(self.radius,self.canvas_w,self.canvas_h)
-        self.todo_line = self.__draw_line(self,self.todo_coords)
+        self.target_index = randint(0,2)
+        self.target_color = self.color_list[['alpha','beta','gamma'][self.target_index]]
 
+        self.todo_line = self.__draw_line(self,self.todo_coords,self.target_color)
         # Center coordinates of the canvas (not screen coordinates)
         self.center_x = self.canvas_w/2
         self.center_y = self.canvas_h/2 
@@ -91,7 +106,7 @@ class PracticeGUI(tk.Frame):
                                       self.canvas_w/2+self.radius,
                                       self.canvas_h/2+self.radius,
                                       width = 2,
-                                      dash=(25,25),outline = 'white')
+                                      dash=(conf.pixels_between_dash,conf.pixels_between_dash))
 
         self.canvas.bind("<B1-Motion>", self.__drag)
         
@@ -117,21 +132,43 @@ class PracticeGUI(tk.Frame):
         btn.place(relx=conf.next_button_relx, rely=conf.next_button_rely, relwidth=conf.next_button_relwidth, relheight=conf.next_button_relheight)
         return btn
     
-    
-    def __draw_line(self,parent,coords):
-        return self.canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5)
+
+    def __draw_line(self,parent,coords,color="black"):
+        return self.canvas.create_line(coords[0],coords[1],coords[2],coords[3],width=5,fill=color)
 
 
-    def __generate_coor_line(self,radius,w,h):
-        theta = math.radians(randint(0,359))
-        center_x = w/2
-        center_y = h/2
+    def __generate_coor_ref_lines(self,radius,w,h):
+        # random radian number
+        theta1 = math.radians(randint(0,359))
+        theta2 = math.radians(randint(0,359))
+        theta3 = math.radians(randint(0,359))
 
-        point1_x = center_x+math.cos(theta)*radius
-        point1_y = center_y+math.sin(theta)*radius
-        point2_x = center_x-math.cos(theta)*radius
-        point2_y = center_y-math.sin(theta)*radius        
-        return (point1_x,point1_y,point2_x,point2_y)
+        # center of the upper canvas
+        
+        line1_center_x = w/5*1.5
+        line2_center_x = w/5*2.5
+        line3_center_x = w/5*3.5
+        lines_center_y = h/2
+        # diagonal coordiantes that specifies an oval
+        line1_point1_x = line1_center_x+math.cos(theta1)*radius
+        line1_point1_y = lines_center_y+math.sin(theta1)*radius
+        line1_point2_x = line1_center_x-math.cos(theta1)*radius
+        line1_point2_y = lines_center_y-math.sin(theta1)*radius        
+
+
+        line2_point1_x = line2_center_x+math.cos(theta2)*radius
+        line2_point1_y = lines_center_y+math.sin(theta2)*radius
+        line2_point2_x = line2_center_x-math.cos(theta2)*radius
+        line2_point2_y = lines_center_y-math.sin(theta2)*radius
+
+        line3_point1_x = line3_center_x+math.cos(theta3)*radius
+        line3_point1_y = lines_center_y+math.sin(theta3)*radius
+        line3_point2_x = line3_center_x-math.cos(theta3)*radius
+        line3_point2_y = lines_center_y-math.sin(theta3)*radius                
+        return (line1_point1_x,line1_point1_y,line1_point2_x,line1_point2_y,
+                line2_point1_x,line2_point1_y,line2_point2_x,line2_point2_y,
+                line3_point1_x,line3_point1_y,line3_point2_x,line3_point2_y)
+
     
     def __generate_todo_coor_line(self,radius,w,h):
         center_x = w/2
@@ -166,7 +203,7 @@ class PracticeGUI(tk.Frame):
             new_p2_y = self.center_y-y_offset
             self.todo_line_slope = (self.center_y-y)/(x-self.center_x)
         self.canvas.delete(self.todo_line)
-        self.todo_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y])    
+        self.todo_line = self.__draw_line(self,[new_p1_x,new_p1_y,new_p2_x,new_p2_y],self.target_color)    
     
 
     def __drag(self,event):
@@ -177,10 +214,11 @@ class PracticeGUI(tk.Frame):
 
 
     def _is_good_result(self):
-        if abs(self.coords[2]-self.coords[0]) < MINIMUM_X_DIFF:
+        self.target_coords = self.ref_line_coords[self.target_index*4:self.target_index*4+4]
+        if abs(self.target_coords[2]-self.target_coords[0]) < conf.minimum_x_diff: # Global in baseline.py
             theta1 = math.atan(float('inf'))
         else:
-            theta1 = math.atan((self.coords[1]-self.coords[3])/(self.coords[2]-self.coords[0]))
+            theta1 = math.atan((self.target_coords[1]-self.target_coords[3])/(self.target_coords[2]-self.target_coords[0]))
         theta2 = math.atan(self.todo_line_slope)
         return abs(theta1-theta2) < 10*math.pi/180
     
